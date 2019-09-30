@@ -170,12 +170,18 @@ for token in tokens:
     
     elif token == "clrovr": # clear the stack overflow flag
         machine_code_bytes.append(0x13)
-    
+
+    elif token == "readr": # read from an address from a register
+        machine_code_bytes.append(0x14)
+
     elif token == "inc": # increment
         machine_code_bytes.append(0x15)
     
     elif token == "dec": # decrement
         machine_code_bytes.append(0x16)
+
+    elif token == "writr": #write to an address from a register
+        machine_code_bytes.append(0x17)
     
     elif token == "pb": # put byte (not an instruction, just an assembler directive to write a byte at that position)
         pass

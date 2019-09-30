@@ -303,7 +303,18 @@ class TMA_16:
             self.stack_flag = 0
             self.ip += 1
 
-        # NOTE: instruction 0x14 is unimplemented for the TMA-16; ask Dante/Claire why if you're curious
+        elif program[self.ip] == 0x14: # readr: read from a memory address stored in a register
+            if program[self.ip + 1] == 0x0A:
+                self.ra = program[self.reg_val(program[self.ip + 2])]
+            elif program[self.ip + 1] == 0x0B:
+                self.rb = program[self.reg_val(program[self.ip + 2])]
+            elif program[self.ip + 1] == 0x0C:
+                self.rc = program[self.reg_val(program[self.ip + 2])]
+            elif program[self.ip + 1] == 0x0D:
+                self.rd = program[self.reg_val(program[self.ip + 2])]
+            else:
+                hardware_exception(f"illegal instruction at address {hex(self.ip)}", self)
+            self.ip += 3
 
         elif program[self.ip] == 0x15: # inc: increment a register
             overflow_flag = False
@@ -350,6 +361,18 @@ class TMA_16:
                 hardware_exception(f"illegal instruction at address {hex(self.ip)}", self)
             self.ip += 2
 
+        elif program[self.ip] == 0x17: # writr: write to a register-specified memory address
+            if program[self.ip + 1] == 0x0A:
+                program[self.reg_val(program[self.ip + 2])] = self.ra 
+            elif program[self.ip + 1] == 0x0B:
+                program[self.reg_val(program[self.ip + 2])] = self.rb
+            elif program[self.ip + 1] == 0x0C:
+                program[self.reg_val(program[self.ip + 2])] = self.rc
+            elif program[self.ip + 1] == 0x0D:
+                program[self.reg_val(program[self.ip + 2])] = self.rd 
+            else:
+                hardware_exception(f"illegal instruction at address {hex(self.ip)}", self)
+            self.ip += 4
 
         else:
             hardware_exception(f"unknown/unimplemeted instruction ``{hex(program[self.ip])}'' at address {hex(self.ip)}", self)
