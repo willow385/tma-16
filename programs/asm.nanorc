@@ -2,6 +2,9 @@
 ## Modified for TMA-16 assembly by Dante Falzone.
 syntax "ASM" "\.(asm)$"
 
+## Macros
+color red "[A-Z][A-Z_0-9]+"
+
 ## Numeric literals
 color cyan "[0-9]+"
 color cyan "0x[0-9a-fA-F]+"
@@ -9,9 +12,7 @@ color cyan "0b[0-1]+"
 
 ## Register names
 color brightmagenta "(ra|rb|rc|rd|ip)"
-
-## Macros and keywords
-color red "[A-Z][A-Z_0-9]+"
+## Keywords
 color green "(jmp|jeq|jgr|read|write|movr|movl|out|halt|push|pop|ovrf|clrovr|writr)"
 color yellow "(add|sub|and|or|xor|not|inc|dec)"
 
