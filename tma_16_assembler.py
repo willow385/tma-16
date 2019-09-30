@@ -1,4 +1,7 @@
-#TODO: add macros and make it so that you can jump to a location without having to know its exact address
+# TODO: add macros and make it so that you can jump to a location without having to know its exact address
+
+# UPDATE 30 September 2019: this assembler now supports "#define", allowing you to create global constants
+# in your assembly programs
 
 import sys
 import re
@@ -28,6 +31,20 @@ for line in decommented_lines:
     for token in line.split(' '):
         if token != '':
             tokens.append(token)
+
+# expand the macros
+def expand_macro_defs(token_list):
+    for i in range (0, len(token_list)):
+        try:
+            if token_list[i] == "#define":
+                for j in range (0, len(token_list)):
+                    if token_list[j] == token_list[i + 1]:
+                        token_list[j] = token_list[i + 2]
+                del token_list[i:(i + 3)]
+        except IndexError:
+            continue
+
+expand_macro_defs(tokens)
 
 # then we turn it into TMA-16 machine code
 machine_code_bytes = []
