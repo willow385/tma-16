@@ -264,6 +264,7 @@ class TMA_16:
             self.ip += 2
  
         elif program[self.ip] == 0x11: # pop: take a byte off the stack
+            ip_manip = False # flag to tell if we're directly manipulating the instruction pointer
             if program[self.ip + 1] == 0x0A:
                 self.ra = self.stack[self.stack_pointer]
             elif program[self.ip + 1] == 0x0B:
@@ -272,6 +273,9 @@ class TMA_16:
                 self.rc = self.stack[self.stack_pointer]
             elif program[self.ip + 1] == 0x0D:
                 self.rd = self.stack[self.stack_pointer]
+            elif program[self.ip + 1] == 0x0E:
+                ip_manip = True
+                self.ip = self.stack[self.stack_pointer]
             else:
                 hardware_exception(f"illegal instruction at address {hex(self.ip)}", self)
             self.stack[self.stack_pointer] = 0x00 # the value is now gone from the stack
@@ -279,7 +283,8 @@ class TMA_16:
                 self.stack_pointer -= 1
             if self.stack_pointer < 0:
                 hardware_exception(f"implementation bug triggered at address {hex(self.ip)} (attempted to access negative stack index)", self)
-            self.ip += 2
+            if not ip_manip:
+                self.ip += 2
 
         elif program[self.ip] == 0x12: # ovrf: check the stack flag, presumably to see if there's an overflow
             if program[self.ip + 1] == 0x0A:
