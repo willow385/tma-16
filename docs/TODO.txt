@@ -1,3 +1,7 @@
 TODO
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 > Write digital specification for TMA-16 instruction set
+
+> Implement an instruction that allows you to read from
+  a runtime-determined memory address (could maybe use
+  instruction 0x14 for this?)
