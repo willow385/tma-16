@@ -13,7 +13,7 @@ color cyan "0b[0-1]+"
 ## Register names
 color brightmagenta "(ra|rb|rc|rd|ip)"
 ## Keywords
-color green "(jmp|jeq|jgr|read|write|movr|movl|out|halt|push|pop|ovrf|clrovr|writr)"
+color green "(jmp|jeq|jgr|read|write|movr|movl|out|halt|push|pop|ovrf|clrovr|readr|writr)"
 color yellow "(add|sub|and|or|xor|not|inc|dec)"
 
 color blue "^[[:space:]]*#[[:space:]]*(define|undef|include|ifn?def|endif|elif|else|if|warning|error)"
