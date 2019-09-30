@@ -16,6 +16,8 @@ jeq     rd   ra     0x0027 ; ra == 21 ? goto 0x0027 : halt
 
 halt                       ; if ra != 21 then we exit here
 
+; if we got here, then it must mean that ra contains the value 21, and that
+; our program therefore successfully multiplied 3 by 7
 movl    rd   51            ; ascii '3'
 out     rd
 movl    rd   32            ; ascii space
