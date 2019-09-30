@@ -246,7 +246,7 @@ class TMA_16:
             else:
                 hardware_exception(f"illegal instruction at address {hex(self.ip)}", self)
             self.ip += 2
-            
+
 
         elif program[self.ip] == 0x0E: # out: print to stdout
             self.stdout += chr(self.reg_val(program[self.ip + 1]))
@@ -267,7 +267,7 @@ class TMA_16:
             else:
                 self.stack_flag = 1
             self.ip += 2
- 
+
         elif program[self.ip] == 0x11: # pop: take a byte off the stack
             ip_manip = False # flag to tell if we're directly manipulating the instruction pointer
             if program[self.ip + 1] == 0x0A:
