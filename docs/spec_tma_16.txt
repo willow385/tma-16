@@ -1,0 +1,42 @@
+*** INSTRUCTION SET & ASSEMBLY LANGUAGE OF THE TMA-16 ***
+
+Note: The letters X, Y, Z, and G, H, I are used as placeholders for hexadecimal
+digits in the table below.
+
+For opcodes that operate on registers, the registers are specified with the
+following bytes:
+0x0A = register a
+0x0B = register b
+0x0C = register c
+0x0D = register d
+0x0E = instruction pointer
+
+Machine code   | Assembly syntax  | Description
+---------------+------------------+-----------------------------------------------
+01 XY ZG       | jmp 0xXYZG       | Set the instruction pointer to 0xXYZW.
+---------------+------------------+-----------------------------------------------
+02 0X 0Y ZG HI | jeq rX rY 0xZGHI | If the value stored in register X is equal to
+               |                  | the value stored in register Y, then set
+               |                  | the instruction pointer to 0xZGHI. Otherwise,
+               |                  | increment the instruction pointer by 5.
+---------------+------------------+-----------------------------------------------
+03 0X 0Y ZG HI | jgr rX rY 0xZGHI | If the value stored in register X is greater
+               |                  | than the value stored in register Y, then set
+               |                  | the instruction pointer to 0xZGHI. Otherwise,
+               |                  | increment the instruction pointer by 5.
+---------------+------------------+-----------------------------------------------
+04 0X 0Y       | add rX rY        | Take the sum of the values stored in registers
+               |                  | X and Y, and store it in register X. Then,
+               |                  | increment the instruction pointer by 3.
+---------------+------------------+-----------------------------------------------
+05 0X 0Y       | sub rX rY        | Take the absolute value of the difference of
+               |                  | the values in registers X and Y, and store it
+               |                  | in register X. Then, increment the instruction
+               |                  | pointer by 3.
+---------------+------------------+-----------------------------------------------
+06 0X YZ GH    | read rX 0xYZGH   | Find the value stored at memory address 0xYZGH
+               |                  | and copy it into register X, then increment
+               |                  | the instruction pointer by 4.
+---------------+------------------+-----------------------------------------------
+07 0X YZ GH    | write rX 0xYZGH  | Take the value stored in register X and write
+               |                  | it to memory address 0xYZGH.
