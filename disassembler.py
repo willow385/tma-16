@@ -1,4 +1,5 @@
 # IMPORTANT NOTE: this isn't finished yet
+# version 0.0 of the disassembler
 
 import sys
 
