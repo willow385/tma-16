@@ -1,7 +1,9 @@
 # TODO: add macros and make it so that you can jump to a location without having to know its exact address
 
 # UPDATE 30 September 2019: this assembler now supports "#define", allowing you to create global constants
-# in your assembly programs
+# in your assembly programs.
+
+# This is version 1.0 of the assembler
 
 import sys
 import re
