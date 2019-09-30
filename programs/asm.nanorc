@@ -6,7 +6,7 @@ syntax "ASM" "\.(asm)$"
 color red "[A-Z][A-Z_0-9]+"
 
 ## Numeric literals
-color cyan "[0-9]+"
+color cyan "[[:space:]][0-9]+"
 color cyan "0x[0-9a-fA-F]+"
 color cyan "0b[0-1]+"
 
