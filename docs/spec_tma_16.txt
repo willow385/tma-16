@@ -40,3 +40,5 @@ Machine code   | Assembly syntax  | Description
 ---------------+------------------+-----------------------------------------------
 07 0X YZ GH    | write rX 0xYZGH  | Take the value stored in register X and write
                |                  | it to memory address 0xYZGH.
+
+TODO: finish writing this
