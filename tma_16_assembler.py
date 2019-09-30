@@ -37,10 +37,14 @@ def expand_macro_defs(token_list):
     for i in range (0, len(token_list)):
         try:
             if token_list[i] == "#define":
+                macro_name = token_list[i + 1]
+                macro_val  = token_list[i + 2]
                 for j in range (0, len(token_list)):
-                    if token_list[j] == token_list[i + 1]:
-                        token_list[j] = token_list[i + 2]
-                del token_list[i:(i + 3)]
+                    if token_list[j] == macro_name:
+                        token_list[j] = macro_val
+                token_list[i] = ""
+                token_list[i + 1] = ""
+                token_list[i + 2] = ""
         except IndexError:
             continue
 
@@ -99,7 +103,10 @@ for token in tokens:
     # two options, which are to prefix all instructions with
     # enough padding to make everything 16 bits, or to create a
     # brand-new instruction set again.
-    if is_int_literal(token):
+    if token == "":
+        continue
+
+    elif is_int_literal(token):
         machine_code_bytes.append(most_sig_8_bits(int(token)))
         machine_code_bytes.append(least_sig_8_bits(int(token)))
 
