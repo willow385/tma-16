@@ -1,3 +1,5 @@
+# This is version 1.1 of the TMA-16
+
 import sys
 import time
 
