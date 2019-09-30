@@ -2,19 +2,20 @@
 ; and make sure it's running more or less
 ; in accordance with the specification
 
-; first, an unconditional jump instruction
+; first, an unconditional jump instruction to take us past the values
+; "HELLO" we're putting down there with ``pb'' directives
 jmp     0x000D
 
-; let's put the word "HELLO" in the executable
-; remember when aligning that sizeof(int) on the TMA-16 is 2 bytes
+; Now let's put the word "HELLO" in the executable using pb ("put byte")
+; Remember when aligning addresses that sizeof(int) on the TMA-16 is 2 bytes.
 pb      72
 pb      69      ; nice
 pb      76
 pb      76
 pb      79
 
-; move literal (movl)
-movl    ra      0b11010 ; the `movl' op will be the 0xDth byte of the executable
+; move literal (movl) - move a literal integer value into a register
+movl    ra      0b11010 ; this `movl' op will be the 0xDth byte of the executable
 movl    rb      0b10110
 
 ; AND operation
@@ -41,10 +42,11 @@ not     ra              ; now ra should contain binary 1111111111101100 (==0xFFF
 push    ra
 
 ; By now, the stack should have these
-; hex values from bottom to top: 12 1B 0A 0C
+; hex values from bottom to top: 0012 001B 000A FFF5
 ; If it doesn't, then there's an implementation bug in your TMA-16.
 
-; Now let's try using the ``read'' operation to get the ``HELLO'' we put up there.
+; Now let's try using the ``read'' operation to get the ``HELLO''
+; we put up there using the ``pb'' assembler directive.
 ; This should result in ``HELLO'' being printed to stdout.
 read    ra      0x0004
 out     ra
