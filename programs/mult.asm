@@ -1,9 +1,9 @@
 ; A program written in TMA-16 assembly that multiplies two
 ; numbers defined by macro constants. I wrote it to multiply
 ; 3 by 7 but you can change that by editing the macros below.
-#define MULT_OPERAND_0      3
-#define MULT_OPERAND_1      7
-#define EXPECTED_RESULT    21
+#define MULT_OPERAND_0      4
+#define MULT_OPERAND_1      4
+#define EXPECTED_RESULT    16
 
 ; don't change these two
 #define ADD_LOOP_START 0x000F ; address of the `add' operation

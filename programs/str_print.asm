@@ -1,13 +1,17 @@
 ; program to print a hardcoded string to the TMA-16's stdout
 
-movl    rd      0      ; for comparing to see if we've hit a null char yet
-movl    rb      0x001F ; pointer to the first character
-readr   ra      rb     ; find the address pointed to by rb and store its value in ra
-jeq     ra rd   0x0019 ; if it's '\0', then go to the `halt` instruction
-out     ra             ; otherwise, print to stdout
-inc     rb             ; inc string pointer by 2 since all numeric literals are 2 bytes wide
+#define STRING_START_PTR 0x001F ; the address of the string's first character
+#define HALT_OP_ADDRESS  0x0019 ; the program's exit point
+#define READR_OP_ADDRESS 0x0008 ; an address we'll need to jump back to repeatedly
+
+movl    rd      0                ; for comparing to see if we've hit a null char yet
+movl    rb      STRING_START_PTR ; address where the string starts
+readr   ra      rb               ; find the address pointed to by rb and store its value in ra
+jeq     ra rd   HALT_OP_ADDRESS  ; if it's '\0', then go to the `halt` instruction
+out     ra                       ; otherwise, print to stdout
+inc     rb                       ; inc string pointer by 2 since all numeric literals are 2 bytes wide
 inc     rb
-jmp     0x0008         ; go back to the "readr" instruction
+jmp     READR_OP_ADDRESS         ; go back to the "readr" instruction
 
 halt
 
