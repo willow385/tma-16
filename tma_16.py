@@ -73,13 +73,16 @@ class TMA_16:
         elif num == 0x0E:
             return self.ip
         else:
-            hardware_exception(f"nonexistent register ``r{hex(num)}''")
+            hardware_exception(f"nonexistent register ``r{hex(num)[2:]}''", self)
 
     # A very long, very badly-written function that really ought to be broken up and modularized
     # if I ever get around to refactoring this. This function takes a program in the form of a
     # bytearray and executes the instruction selected by the instruction pointer.
     def execute(self, program):
-        self.current_instruction = program[self.ip]
+        try:
+            self.current_instruction = program[self.ip]
+        except IndexError:
+            hardware_exception(f"segmentation fault (process attempted to access illegal address {hex(self.ip)})", self)
 
         if program[self.ip] == 0x01: # jmp: unconditional jump instruction
             self.ip = combine_bytes(program[self.ip + 1], program[self.ip + 2])
