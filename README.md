@@ -2,7 +2,7 @@
 A Thouroughly Minimalist Architecture (16-bit)
 
 The TMA-16 is a 16-bit computer of Dante's own design, with a very limited instruction set (only 23 opcodes!).
-It was created both as a teaching tool, to help people visually computation at the lowest level, as well as a learning
+It was created both as a teaching tool, to help people visualize computation at the lowest level, as well as a learning
 tool, to help Dante have a better grasp of low-level programming and a slightly easier Assembly language to practice with
 than x86 Assembly. As of 29 Sept 2019 it has an artificial delay built into it to make it easier to see what's going on,
 which gives it a processing speed of 5 cycles per second plus whatever latency the Python interpreter adds.
