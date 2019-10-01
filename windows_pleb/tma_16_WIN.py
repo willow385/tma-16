@@ -1,4 +1,5 @@
 # This is version 1.1 of the TMA-16
+# Modified for Windows compatibility
 
 import sys
 import time
@@ -9,7 +10,7 @@ import time
 def hardware_exception(error_msg, machine):
     print(f"Error! {error_msg}")
     print("TMA-16 core dumped")
-    sys.exit(1)
+    input("Press ENTER to exit")
 
 
 # This function performs a bitwise NOT operation, because for some dumb
@@ -257,7 +258,7 @@ class TMA_16:
             self.ip += 2
 
         elif program[self.ip] == 0x0F: # halt: stop running
-            print(f"\nProgram terminated at address {hex(self.ip)} with no errors")
+            input(f"\nProgram terminated at address {hex(self.ip)} with no errors; press enter to stop")
             sys.exit(0)
 
         elif program[self.ip] == 0x10: # push: push a byte onto the stack
@@ -583,14 +584,16 @@ class TMA_16:
 machine = TMA_16()
 machine.display_internals()
 
-filename = ""
+filename = input("Enter executable name: ")
 no_file = True
+"""
 for arg in sys.argv:
     if arg[-4:] == ".tmx": # extension for TMA executables
         filename = arg
         no_file = False
 if no_file:
     hardware_exception("no program loaded", machine)
+"""
 
 file_context = open(filename, "rb").read()
 instructions = bytearray(file_context)
