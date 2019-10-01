@@ -7,14 +7,17 @@ tool, to help Dante have a better grasp of low-level programming and a slightly 
 than x86 Assembly. As of 29 Sept 2019 it has an artificial delay built into it to make it easier to see what's going on,
 which gives it a processing speed of 5 cycles per second plus whatever latency the Python interpreter adds.
 
-To use this virtual machine, do the following:
-  1. Use the .asm files in the directory /programs/ (or write your own programs in TMA-16 Assembly!)
-  
-  2. Assemble them with `python3 tma_16_assembler.py [file].asm`. Pass the option `-h` or `--hexdump` on the command line to see a 
-     hexdump of your assembled program.
+To assemble programs on Windows:
+    1. Open `tma_16_assembler_WIN.py` with Python 3.
 
-  3. Run them with `python3 tma_16.py [file].tmx` (".tmx" is the extension for TMA-16 executables). If your terminal doesn't
-     support unicode, pass the option `-p` or `--poor`.
+    2. Type the name of the file you wish to assemble and press ENTER. For example `programs\test.asm`
+
+To run assembled programs:
+    1. Open `tma_16_WIN.py` with Python 3.
+
+    2. Type the name of the program to execute and press ENTER. For example `programs\test.tmx`
+
+    3. When the program stops running you can press ENTER to turn off the virtual machine.
 
 If you would like to make tweaks to the TMA-16, or write a new implementation of it, try running some of the provided programs
 (especially test.asm) to make sure that whatever your doing still conforms to the specification.

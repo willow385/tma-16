@@ -1,7 +1,0 @@
-TODO
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> Finish writing disassembler
-
-> Add #include directives and address labels
-
-> Consider implementing stdin

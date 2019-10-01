@@ -23,3 +23,6 @@ TODO: write more complete and detailed documentation; make a less messy implemen
 Rust or C.
 
 If someone wrote a C compiler for the TMA-16, I think it'd be just the coolest thing ever.
+
+# Attention Windows users!
+The scripts in this repo's top directory won't work! Use the scripts in /windows_pleb/ instead.
