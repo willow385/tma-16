@@ -8,16 +8,16 @@ than x86 Assembly. As of 29 Sept 2019 it has an artificial delay built into it t
 which gives it a processing speed of 5 cycles per second plus whatever latency the Python interpreter adds.
 
 To assemble programs on Windows:
-    1. Open `tma_16_assembler_WIN.py` with Python 3.
+  1. Open `tma_16_assembler_WIN.py` with Python 3.
 
-    2. Type the name of the file you wish to assemble and press ENTER. For example `programs\test.asm`
+  2. Type the name of the file you wish to assemble and press ENTER. For example `programs\test.asm`
 
 To run assembled programs:
-    1. Open `tma_16_WIN.py` with Python 3.
+  1. Open `tma_16_WIN.py` with Python 3.
 
-    2. Type the name of the program to execute and press ENTER. For example `programs\test.tmx`
+  2. Type the name of the program to execute and press ENTER. For example `programs\test.tmx`
 
-    3. When the program stops running you can press ENTER to turn off the virtual machine.
+  3. When the program stops running you can press ENTER to turn off the virtual machine.
 
 If you would like to make tweaks to the TMA-16, or write a new implementation of it, try running some of the provided programs
 (especially test.asm) to make sure that whatever your doing still conforms to the specification.
