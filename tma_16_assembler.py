@@ -115,85 +115,85 @@ for token in tokens:
     elif is_hex_literal(token):
         machine_code_bytes.append(most_sig_8_bits(int(token, 16)))
         machine_code_bytes.append(least_sig_8_bits(int(token, 16)))
-    
+
     elif is_bin_literal(token):
         machine_code_bytes.append(most_sig_8_bits(int(token[2:], 2)))
         machine_code_bytes.append(least_sig_8_bits(int(token[2:], 2)))
-    
+
     elif is_reg_literal(token):
         if token == "ra":
             machine_code_bytes.append(0x0A)
-    
+
         elif token == "rb":
             machine_code_bytes.append(0x0B)
-        
+
         elif token == "rc":
             machine_code_bytes.append(0x0C)
-        
+
         elif token == "rd":
             machine_code_bytes.append(0x0D)
-        
+
         elif token == "ip":
             machine_code_bytes.append(0x0E)
-    
+
     elif token == "jmp": # unconditional jump
         machine_code_bytes.append(0x01)
-    
+
     elif token == "jeq": # jump-if-equal
         machine_code_bytes.append(0x02)
-    
+
     elif token == "jgr": # jump-if-greater
         machine_code_bytes.append(0x03)
-    
+
     elif token == "add":
         machine_code_bytes.append(0x04)
-    
+
     elif token == "sub":
         machine_code_bytes.append(0x05)
-    
+
     elif token == "read": # read from memory
         machine_code_bytes.append(0x06)
-    
+
     elif token == "write": # write to memory
         machine_code_bytes.append(0x07)
-    
+
     elif token == "movr": # move register
         machine_code_bytes.append(0x08)
-    
+
     elif token == "movl": # move literal
         machine_code_bytes.append(0x09)
-    
+
     elif token == "and":
         machine_code_bytes.append(0x0A)
-    
+
     elif token == "or":
         machine_code_bytes.append(0x0B)
-    
+
     elif token == "xor":
         machine_code_bytes.append(0x0C)
-    
+
     elif token == "not":
         machine_code_bytes.append(0x0D)
-    
+
     elif token == "out": # print to stdout
         machine_code_bytes.append(0x0E)
-    
+
     elif token == "halt":
         machine_code_bytes.append(0x0F) # the actual opcode
         machine_code_bytes.append(0x48) # H
         machine_code_bytes.append(0x41) # A
         machine_code_bytes.append(0x4C) # L
         machine_code_bytes.append(0x54) # T
-    
+
     elif token == "push":
         machine_code_bytes.append(0x10)
-    
+
     elif token == "pop":
         machine_code_bytes.append(0x11)
-    
+
     elif token == "ovrf": # check the stack overflow flag
         machine_code_bytes.append(0x12)
-    
+
     elif token == "clrovr": # clear the stack overflow flag
         machine_code_bytes.append(0x13)
 
@@ -202,16 +202,16 @@ for token in tokens:
 
     elif token == "inc": # increment
         machine_code_bytes.append(0x15)
-    
+
     elif token == "dec": # decrement
         machine_code_bytes.append(0x16)
 
     elif token == "writr": #write to an address from a register
         machine_code_bytes.append(0x17)
-    
+
     elif token == "pb": # put byte (not an instruction, just an assembler directive to write a byte at that position)
         pass
-    
+
     else:
         print(f"error: {sys.argv[1]}: unrecognized operation `{token}`")
         exit(1)
