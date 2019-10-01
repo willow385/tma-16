@@ -1,7 +1,7 @@
 TODO
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> Write digital specification for TMA-16 instruction set
+> Finish writing disassembler
 
-> Implement an instruction that allows you to read from
-  a runtime-determined memory address (could maybe use
-  instruction 0x14 for this?)
+> Add #include directives and address labels
+
+> Consider implementing stdin
