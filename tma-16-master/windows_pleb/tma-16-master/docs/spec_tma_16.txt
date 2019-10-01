@@ -1,0 +1,162 @@
+*** INSTRUCTION SET & ASSEMBLY LANGUAGE OF THE TMA-16 ***
+
+Note: The letters X, Y, Z, and G, H, I are used as placeholders for hexadecimal
+digits in the table below.
+
+For opcodes that operate on registers, the registers are specified with the
+following bytes:
+0x0A = register a
+0x0B = register b
+0x0C = register c
+0x0D = register d
+0x0E = instruction pointer
+
+Machine code   | Assembly syntax  | Description
+---------------+------------------+-----------------------------------------------
+01 XY ZG       | jmp 0xXYZG       | Set the instruction pointer to 0xXYZW.
+---------------+------------------+-----------------------------------------------
+02 0X 0Y ZG HI | jeq rX rY 0xZGHI | If the value stored in register X is equal to
+               |                  | the value stored in register Y, then set
+               |                  | the instruction pointer to 0xZGHI. Otherwise,
+               |                  | increment the instruction pointer by 5.
+---------------+------------------+-----------------------------------------------
+03 0X 0Y ZG HI | jgr rX rY 0xZGHI | If the value stored in register X is greater
+               |                  | than the value stored in register Y, then set
+               |                  | the instruction pointer to 0xZGHI. Otherwise,
+               |                  | increment the instruction pointer by 5.
+---------------+------------------+-----------------------------------------------
+04 0X 0Y       | add rX rY        | Take the sum of the values stored in registers
+               |                  | X and Y, and store it in register X. Then,
+               |                  | increment the instruction pointer by 3.
+---------------+------------------+-----------------------------------------------
+05 0X 0Y       | sub rX rY        | Take the absolute value of the difference of
+               |                  | the values in registers X and Y, and store it
+               |                  | in register X. Then, increment the instruction
+               |                  | pointer by 3.
+---------------+------------------+-----------------------------------------------
+06 0X YZ GH    | read rX 0xYZGH   | Find the value stored at memory address 0xYZGH
+               |                  | and copy it into register X, then increment
+               |                  | the instruction pointer by 4.
+---------------+------------------+-----------------------------------------------
+07 0X YZ GH    | write rX 0xYZGH  | Take the value stored in register X and write
+               |                  | it to memory address 0xYZGH. If the executable
+               |                  | doesn't have at least (0xYZGH + 1) bytes, the
+               |                  | machine will leave an error message and stop.
+---------------+------------------+-----------------------------------------------
+08 0X 0Y       | movr rX rY       | Copy the contents of register Y into register
+               |                  | X, then increment the instruction pointer by
+               |                  | 3.
+---------------+------------------+-----------------------------------------------
+09 0X YZ GH    | movl rX 0xYZGH   | Store the literal value 0xYZGH in register X,
+               |                  | then increment the instruction pointer by 4.
+               |                  | This doesn't have to use a hexadecimal value;
+               |                  | for example, the following three lines will
+               |                  | all do the same thing:
+               |                  | 
+               |                  | movl ra 10
+               |                  | movl ra 0xA
+               |                  | movl ra 0b1010
+               |                  |
+               |                  | All three of those lines will assemble into
+               |                  | the bytes 09 0A 00 0A, which when run will
+               |                  | result in the value 10 being stored in
+               |                  | register A.
+---------------+------------------+-----------------------------------------------
+0A 0X 0Y       | and rX rY        | This will perform a bitwise AND operation on
+               |                  | registers X and Y, storing the result in
+               |                  | register X. It will then increment the
+               |                  | instruction pointer by 3.
+---------------+------------------+-----------------------------------------------
+0B 0X 0Y       | or rX rY         | Similar to above, but instead of bitwise AND
+               |                  | it performs bitwise OR.
+---------------+------------------+-----------------------------------------------
+0C 0X 0Y       | xor rX rY        | Similar to above, but instead of bitwise OR it
+               |                  | performs bitwise XOR.
+---------------+------------------+-----------------------------------------------
+OD 0X          | not rX           | Performs a bitwise NOT operation on register X
+               |                  | and then incrments the instruction pointer by
+               |                  | 2.
+---------------+------------------+-----------------------------------------------
+0E 0X          | out rX           | This will print to stdout the ASCII character
+               |                  | corresponding to the value in register X, then
+               |                  | increment the instruction pointer by 2.
+---------------+------------------+-----------------------------------------------
+0F             | halt             | The computer will stop running, leaving a
+               |                  | message that indicates that it exited normally
+               |                  | and the address at which it halted. The
+               |                  | assembler will also put the string "HALT"
+               |                  | in the executable right after this for
+               |                  | debugging purposes; however, it makes no
+               |                  | difference to the TMA-16 if this is present
+               |                  | or not.
+---------------+------------------+-----------------------------------------------
+10 0X          | push rX          | If the stack has room, the value in register X
+               |                  | will be copied onto the top of the stack;
+               |                  | otherwise, the stack flag will be set to 1 to
+               |                  | indicate an overflow. The instruction pointer
+               |                  | will then be incremented by 2.
+---------------+------------------+-----------------------------------------------
+11 0X          | pop rX           | The value on top of the stack will be removed
+               |                  | and stored in register X. Note that you can
+               |                  | pop values into the instruction pointer if
+               |                  | you like, using ``pop ip''. Unless you have
+               |                  | popped a new address into it, the instruction
+               |                  | pointer will then be incremented by 2.
+---------------+------------------+-----------------------------------------------
+12 0X          | ovrf rX          | Copy the value of the stack flag into register
+               |                  | X and increment the instruction pointer by 2.
+---------------+------------------+-----------------------------------------------
+13             | clrovr           | Set the stack flag to zero, no matter what its
+               |                  | prior value is, and increment the instruction
+               |                  | pointer by 1.
+---------------+------------------+-----------------------------------------------
+14 0X 0Y       | readr rX rY      | Find whatever value is at the memory address
+               |                  | equal to the value in register Y, and store
+               |                  | the retrieved value in register X. If the
+               |                  | program contains no such memory address, the
+               |                  | TMA-16 will segfault; otherwise, it will
+               |                  | proceed to increment the instruction pointer
+               |                  | by 3.
+---------------+------------------+-----------------------------------------------
+15 0X          | inc rX           | Increase the value in register X by 1. If the
+               |                  | resultant value is greater than 0xFFFF, the
+               |                  | TMA-16 will print an error message and stop;
+               |                  | otherwise, it will incrmeent the instruction
+               |                  | pointer by 2.
+---------------+------------------+-----------------------------------------------
+16 0X          | dec rX           | Decrease the value in register X by 1 if it's
+               |                  | greater than 0, then increment the instruction
+               |                  | pointer by 2.
+---------------+------------------+-----------------------------------------------
+17 0X 0Y       | writr rX rY      | Write the value in register X to the memory
+               |                  | address equalling the value in register Y,
+               |                  | then increment the instruction pointer by 3.
+---------------+------------------+-----------------------------------------------
+
+
+*** Assembler Macros ***
+
+#define MACRO_NAME constant_value - this will result in the assembler replacing
+                                    all instances of "MACRO_NAME" with
+                                    "constant_value" when it preprocesses the code.
+
+pb some_number - some_number must either be a number literal (with prefix 0x for
+                 hexadecimal, 0b for binary, or no prefix for decimal) or a macro
+                 that is #defined as a number literal. The assembler will put two
+                 bytes in the executable where it sees this; the first byte
+                 represents the eight most significant bits of the number, and the
+                 second byte represents the least significant bits.
+
+                 For example the following:
+
+                 pb 0xB6F
+
+                 will result in the bytes 0B 6F being written to the executable.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If you encounter a bug in the implementation, or you have a suggestion for a
+feature to add, feel free to submit a pull request. Features currently planned to
+be added next include address labels (to make it easier to `jmp` around in a
+program) and #include statements; also, I am working on a disassembler and am
+considering writing a linker.
