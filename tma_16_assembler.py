@@ -3,7 +3,7 @@
 # UPDATE 30 September 2019: this assembler now supports "#define", allowing you to create global constants
 # in your assembly programs.
 
-# This is version 1.0 of the assembler
+# This is version 1.1 of the assembler
 
 import sys
 import re
@@ -93,6 +93,7 @@ def least_sig_8_bits(val_16_bits):
     c = int(b,2)
     return c
 
+i = 0 # index of currently selected token
 for token in tokens:
     # The instruction set of the TMA-16 is based on a
     # pen-and-paper model I made earlier called the TMA-8. I
@@ -212,9 +213,27 @@ for token in tokens:
     elif token == "pb": # put byte (not an instruction, just an assembler directive to write a byte at that position)
         pass
 
+    elif token == "alloc": # allocate (assembler directive to allocate a certain amount of memory)
+        mem_amount = 0
+        if is_int_literal(tokens[i + 1]):
+            mem_amount = int(tokens[i + 1])
+        elif is_hex_literal(tokens[i + 1]):
+            mem_amount = int(tokens[i + 1], 16)
+        elif is_bin_literal(tokens[i + 1]):
+            mem_amount = int(tokens[i + 1][2:], 2)
+        else:
+            print(f"error: {sys.argv[1]}: invalid literal `{tokens[i + 1]}`")
+            exit(1)
+
+        tokens[i + 1] = "" # so we don't have a stray number in the code
+
+        for i in range (0, mem_amount):
+            machine_code_bytes.append(0x00)
+
     else:
         print(f"error: {sys.argv[1]}: unrecognized operation `{token}`")
         exit(1)
+    i += 1 # update index counter
 
 
 # now create the executable

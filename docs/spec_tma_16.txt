@@ -153,6 +153,10 @@ pb some_number - some_number must either be a number literal (with prefix 0x for
 
                  will result in the bytes 0B 6F being written to the executable.
 
+alloc n - this will result in n bytes, each equal to zero, being placed in the
+          executable at this point. For example ``alloc 3'' will result in
+          the bytes 00 00 00 appearing at that point.
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If you encounter a bug in the implementation, or you have a suggestion for a
