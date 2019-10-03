@@ -1,20 +1,21 @@
 ; program to divide two numbers
 
-#define NUMERATOR       27
-#define DENOMINATOR     3
+#define NUMERATOR       12
+#define DENOMINATOR     0
 
 ; memory addresses to which we jump
-#define DIVIDE_BY_ZERO        0x0045
-#define DENOM_BIGGER_THAN_NUM 0x00A7
-#define LOOP_REPEAT           0x0014
-#define DONE                  0x0026
+#define DIVIDE_BY_ZERO        0x004A
+#define DENOM_BIGGER_THAN_NUM 0x00A3
+#define LOOP_REPEAT           0x0019
+#define DONE                  0x002B
 
 movl    ra      NUMERATOR      ; value we compare against
 movl    rb      DENOMINATOR    ; value we add each loop
 movl    rc      0              ; we'll use rc to count how many times we've looped
 xor     rd      rd             ; we'll use this as an accumulator
 
-jeq     rb  rd  DIVIDE_BY_ZERO ; pretty self-explanatory
+jeq     rb  rd  DIVIDE_BY_ZERO
+jgr     rb  ra  DENOM_BIGGER_THAN_NUM
 
 ; The division algorithm here works by counting the number of times you
 ; have to add the denominator to itself to equal the numerator. Hence
