@@ -1,9 +1,11 @@
 ; program to divide two numbers
-
+; The constants NUMERATOR and DENOMINATOR are set to 12 and 4 respectively
+; but you can change them to whatever you like. For best results, ensure
+; that the denominator is less than or equal to the numerator.
 #define NUMERATOR       12
-#define DENOMINATOR     0
+#define DENOMINATOR     4
 
-; memory addresses to which we jump
+; memory addresses to which we jump - don't change these
 #define DIVIDE_BY_ZERO        0x004A
 #define DENOM_BIGGER_THAN_NUM 0x00A3
 #define LOOP_REPEAT           0x0019
