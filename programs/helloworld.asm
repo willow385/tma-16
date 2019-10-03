@@ -25,3 +25,5 @@ out     ra
 movl    ra   33   ; '!'
 out     ra
 halt
+
+; TODO: implement string and char literals in the assembler
