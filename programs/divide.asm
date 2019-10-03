@@ -26,7 +26,7 @@ jgr     rb  ra  DENOM_BIGGER_THAN_NUM
 jeq     rd  ra  DONE           ; if we've reached the numerator, we're done
 inc     rc                     ; add til we reach the number of times num goes into denom
 add     rd      rb             ; add to get up to the numerator     
-jgr     rd  ra  DONE           ; if we've gone past the numeraator, it's not evenly divisible
+jgr     rd  ra  DONE           ; if we've gone past the numerator, it's not evenly divisible
 jmp     LOOP_REPEAT
 
 
