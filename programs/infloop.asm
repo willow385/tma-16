@@ -1,3 +1,5 @@
+; Program that never stops running
+
 ; Stack pushing loop
 movl    ra      STACK_SIZE      ; counter for how many times to push onto stack
 movl    rb      0xEEEE          ; value to push onto the stack
