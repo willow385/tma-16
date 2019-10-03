@@ -1,7 +1,7 @@
 ; program to divide two numbers
 
-#define NUMERATOR       25
-#define DENOMINATOR     2
+#define NUMERATOR       27
+#define DENOMINATOR     3
 
 ; memory addresses to which we jump
 #define DIVIDE_BY_ZERO        0x0045
