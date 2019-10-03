@@ -1,4 +1,5 @@
-; program to divide two numbers
+; This program divides two unsigned integers and leaves the result on the stack.
+
 ; The constants NUMERATOR and DENOMINATOR are set to 12 and 4 respectively
 ; but you can change them to whatever you like. For best results, ensure
 ; that the denominator is less than or equal to the numerator.
