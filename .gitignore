@@ -1,0 +1,5 @@
+# assembled executables
+*/*.tmx
+
+#except this one
+!*/no_asm.tmx
