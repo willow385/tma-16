@@ -17,3 +17,6 @@
 > Standard input?
 
 > Graphics?
+
+> Bitshifting - I feel really dumb to have not already implemented bitshifting.
+  I will definitely have to do that after I finish the disassembler
