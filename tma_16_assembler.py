@@ -3,7 +3,7 @@
 # UPDATE 30 September 2019: this assembler now supports "#define", allowing you to create global constants
 # in your assembly programs.
 
-# This is version 1.1 of the assembler
+# This is version 1.2 of the assembler
 
 import sys
 import re
@@ -181,10 +181,6 @@ for token in tokens:
 
     elif token == "halt":
         machine_code_bytes.append(0x0F) # the actual opcode
-        machine_code_bytes.append(0x48) # H
-        machine_code_bytes.append(0x41) # A
-        machine_code_bytes.append(0x4C) # L
-        machine_code_bytes.append(0x54) # T
 
     elif token == "push":
         machine_code_bytes.append(0x10)
