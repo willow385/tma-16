@@ -1,7 +1,5 @@
 ** Ideas, goals, etc. for the TMA-16 and its toolchain **
 
-> Finish the disassembler (of course)
-
 > Address labels - how best to implement them?
     Step 0: do a tally of the tokens leading up to where the address label is
         1-byte:  halt, clrovr
