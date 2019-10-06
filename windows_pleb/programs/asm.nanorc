@@ -16,6 +16,7 @@ color brightmagenta "(ra|rb|rc|rd|ip)"
 color green "(jmp|jeq|jgr|read|write|movr|movl|out|halt|push|pop|ovrf|clrovr|readr|writr)"
 color yellow "(add|sub|and|or|xor|not|inc|dec)"
 
+## Assembler directives
 color blue "^[[:space:]]*#[[:space:]]*(define|undef|include|ifn?def|endif|elif|else|if|warning|error)"
 color blue "(pb|alloc)"
 
