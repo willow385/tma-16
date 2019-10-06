@@ -127,9 +127,17 @@ OD 0X          | not rX           | Performs a bitwise NOT operation on register
                |                  | address equalling the value in register Y,
                |                  | then increment the instruction pointer by 3.
 ---------------+------------------+-----------------------------------------------
+18 0X          | bsl rX           | Bitshift register X one bit to the left. Any
+               |                  | overflowing bits are truncated. The
+               |                  | instruction pointer is then incremented by 2.
+---------------+------------------+-----------------------------------------------
+19 0X          | bsr rX           | Bitshift register X one bit to the right. Any
+               |                  | underflowing bits are truncated. The
+               |                  | instruction pointer is then incremented by 2.
+---------------+------------------+-----------------------------------------------
 
 
-*** Assembler Macros ***
+*** Assembler Directives ***
 
 #define MACRO_NAME constant_value - this will result in the assembler replacing
                                     all instances of "MACRO_NAME" with

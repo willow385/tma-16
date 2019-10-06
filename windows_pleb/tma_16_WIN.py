@@ -1,4 +1,4 @@
-# This is version 1.1 of the TMA-16
+# This is version 1.2 of the TMA-16
 # Modified for Windows compatibility
 
 import sys
@@ -380,6 +380,56 @@ class TMA_16:
                 hardware_exception(f"illegal instruction at address {hex(self.ip)}", self)
             self.ip += 4
 
+        elif program[self.ip] == 0x18: # bsl: bitshift a register left
+            if program[self.ip + 1] == 0x0A:
+                new_ra = self.ra << 1
+                while new_ra > 65535:
+                    new_ra -= 65536 # chop off the leading excess bits
+                self.ra = new_ra
+
+            elif program[self.ip + 1] == 0x0B:
+                new_rb = self.rb << 1
+                while new_rb > 65535:
+                    new_rb -= 65536 # chop off the leading excess bits
+                self.rb = new_rb
+
+            elif program[self.ip + 1] == 0x0C:
+                new_rc = self.rc << 1
+                while new_rc > 65535:
+                    new_rc -= 65536 # chop off the leading excess bits
+                self.rc = new_rc
+
+            elif program[self.ip + 1] == 0x0D:
+                new_rd = self.rd << 1
+                while new_rd > 65535:
+                    new_rd -= 65536 # chop off the leading excess bits
+                self.rd = new_rd
+
+            else:
+                hardware_exception(f"illegal instruction at address {hex(self.ip)}", self)
+            self.ip += 2
+
+        elif program[self.ip] == 0x19: # bsr: bitshift a register right
+            if program[self.ip + 1] == 0x0A:
+                new_ra = self.ra >> 1
+                while new_ra < 0:
+                    new_ra += 65536 # loop around if overflow
+                self.ra = new_ra
+
+            elif program[self.ip + 1] == 0x0B:
+                new_rb = self.rb >> 1
+                while new_rb < 0:
+                    new_rb += 65536
+                self.rb = new_rb
+
+            elif program[self.ip + 1] == 0x0C:
+                new_rc = self.rc >> 1
+                while new_rc < 0:
+                    new_rc += 65536
+                self.rc = new_rc
+
+            elif program[self.ip + 1] == 0x0D:
+                new_rd = self.rd >> 1
         else:
             hardware_exception(f"unknown/unimplemeted instruction ``{hex(program[self.ip])}'' at address {hex(self.ip)}", self)
 

@@ -3,7 +3,7 @@
 # UPDATE 30 September 2019: this assembler now supports "#define", allowing you to create global constants
 # in your assembly programs.
 
-# This is version 1.2 of the assembler
+# This is version 1.3 of the assembler
 
 # edited for Windows compatibility
 
@@ -208,6 +208,13 @@ for token in tokens:
 
     elif token == "writr": #write to an address from a register
         machine_code_bytes.append(0x17)
+
+    elif token == "bsl": # bitshift left
+        machine_code_bytes.append(0x18)
+
+    elif token == "bsr": # bitshift right
+        machine_code_bytes.append(0x19)
+
 
     elif token == "pb": # put byte (not an instruction, just an assembler directive to write a byte at that position)
         pass
