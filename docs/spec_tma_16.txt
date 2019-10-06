@@ -83,12 +83,7 @@ OD 0X          | not rX           | Performs a bitwise NOT operation on register
 ---------------+------------------+-----------------------------------------------
 0F             | halt             | The computer will stop running, leaving a
                |                  | message that indicates that it exited normally
-               |                  | and the address at which it halted. The
-               |                  | assembler will also put the string "HALT"
-               |                  | in the executable right after this for
-               |                  | debugging purposes; however, it makes no
-               |                  | difference to the TMA-16 if this is present
-               |                  | or not.
+               |                  | and the address at which it halted.
 ---------------+------------------+-----------------------------------------------
 10 0X          | push rX          | If the stack has room, the value in register X
                |                  | will be copied onto the top of the stack;
