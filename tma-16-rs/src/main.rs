@@ -15,11 +15,13 @@ head on up to the parent directory and run the very hacky,
 badly-written, quick-and-dirty Python implementation.
 */
 
-use std::process;
 use std::env;
 use std::fs::File;
 use std::fs;
 use std::io::Read;
+
+pub mod machine;
+pub use machine::Tma16;
 
 // Function to get the name of the executable from command-line args.
 fn get_tmx_name(args: Vec<String>) -> Result<String, &'static str> {
@@ -57,14 +59,6 @@ fn get_file_as_byte_vec(filename: &String) -> Vec<u8> {
 
     buffer
 }
-
-// Function to stop the TMA-16 in various scenarios.
-fn hardware_exception(error_msg: String) {
-    println!("Error! {}", error_msg);
-    println!("TMA-16 core dumped");
-    process::exit(1);
-}
-
 
 
 fn main() -> Result<(), String> {
