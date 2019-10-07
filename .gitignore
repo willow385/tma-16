@@ -2,6 +2,11 @@
 */*.tmx
 */windows_pleb/*.tmx
 
+# rust crap
+**/Cargo.lock
+target/
+
+
 #except this one
 !*/no_asm.tmx
 !*/windows_pleb/no_asm.tmx
