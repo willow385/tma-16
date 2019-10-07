@@ -46,28 +46,13 @@ fn contains_poor_option(args: Vec<String>) -> bool {
     false
 }
 
-// Function to read the contents of a binary file up to 64KB in size.
-fn get_file_as_byte_vec(filename: &String) -> Vec<u8> {
-    let mut f = File::open(&filename).expect("no file found");
-    let metadata = fs::metadata(&filename).expect("unable to read metadata");
-    let mut buffer = vec![0; metadata.len() as usize];
-    f.read(&mut buffer).expect("buffer overflow");
-
-    if metadata.len() > 0xFFFF {
-        panic!("Oversized executable");
-    }
-
-    buffer
-}
-
-
 fn main() -> Result<(), String> {
     let args_vec: Vec<String> = env::args().collect();
 
     /* never thought I'd be using `.map_err(|e| e.to_string())?` with a
        function I wrote myself lol */
     let tmx_filename = get_tmx_name(args_vec).map_err(|e| e.to_string())?;
-    let file_buf: Vec<u8> = get_file_as_byte_vec(&tmx_filename);
+    let file_buf = fs::read(&tmx_filename).unwrap();
 
     /* Haven't yet implemented the actual gotdamn machine yet, so for now all this does
        is hexdump .tmx files, which isn't totally useless but... eh. */
