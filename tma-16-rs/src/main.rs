@@ -21,7 +21,8 @@ use std::fs;
 use std::io::Read;
 
 pub mod machine;
-pub use machine::Tma16;
+pub use machine::*;
+use crate::machine::byte_index;
 
 // Function to get the name of the executable from command-line args.
 fn get_tmx_name(args: Vec<String>) -> Result<String, &'static str> {
@@ -56,7 +57,7 @@ fn main() -> Result<(), String> {
 
     /* Haven't yet implemented the actual gotdamn machine yet, so for now all this does
        is hexdump .tmx files, which isn't totally useless but... eh. */
-    println!("{}", tmx_filename);
+/*    println!("{}", tmx_filename);
     for i in file_buf {
         if i < 0x10 {
             println!("0{:x?}", i);
@@ -64,7 +65,13 @@ fn main() -> Result<(), String> {
             println!("{:x?}", i);
         }
     }
+*/
 
+    let mut my_byte: u16 = 1;
+    my_byte <<= 15;
+    println!("{}", my_byte);
+    my_byte <<= 1;
+    println!("{}", my_byte);
 
     Ok(())
 }
