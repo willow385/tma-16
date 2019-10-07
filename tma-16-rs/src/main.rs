@@ -1,3 +1,20 @@
+/* Rust implementation of the TMA-16, by {Dante,Claire} Falzone.
+
+Licensed under GNU GPL v3 or later version, as with all my other stuff.
+
+Currently under construction; when finished, it will be up to par with
+version 1.2, supporting instructions 0x01 through 0x19.
+
+This implementation will allow you to choose an execution speed delay, or
+choose no delay at all; if you didn't have an artificial delay then I'd expect
+that the Rust implementation would actually be pretty damn fast, possibly not
+too far from running native machine code.
+
+For those of you more concerned with seeing the TMA-16 actually work immediately,
+head on up to the parent directory and run the very hacky,
+badly-written, quick-and-dirty Python implementation.
+*/
+
 use std::process;
 use std::env;
 use std::fs::File;
@@ -20,7 +37,7 @@ fn get_tmx_name(args: Vec<String>) -> Result<String, &'static str> {
 fn contains_poor_option(args: Vec<String>) -> bool {
     for arg in args {
         if arg == "-p" || arg == "--poor" {
-            return true;
+            return true; // didn't even know Rust had a `return` keyword before today lol
         }
     }
 
@@ -58,6 +75,8 @@ fn main() -> Result<(), String> {
     let tmx_filename = get_tmx_name(args_vec).map_err(|e| e.to_string())?;
     let file_buf: Vec<u8> = get_file_as_byte_vec(&tmx_filename);
 
+    /* Haven't yet implemented the actual gotdamn machine yet, so for now all this does
+       is hexdump .tmx files, which isn't totally useless but... eh. */
     println!("{}", tmx_filename);
     for i in file_buf {
         if i < 0x10 {
