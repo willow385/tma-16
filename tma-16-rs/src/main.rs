@@ -83,3 +83,14 @@ fn main() -> Result<(), String> {
 
     Ok(())
 }
+
+/*
+    Rust won't let you do a naive implementation of anything.
+    It forces you to write very robust, high-quality code.
+    I'm still not sure if that's an entirely good thing for all cases;
+    it certainly makes Rust a terrible choice for introducing someone
+    to programming, for example. But overall it's probably for the best
+    that, if people are going to write systems-level (and even kernel-level)
+    code in pure, safe Rust, they *can't* write a hacky, quick-and-dirty
+    implementation.
+*/
