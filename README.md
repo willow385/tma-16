@@ -19,8 +19,8 @@ To use this virtual machine, do the following:
 If you would like to make tweaks to the TMA-16, or write a new implementation of it, try running some of the provided programs
 (especially test.asm) to make sure that whatever your doing still conforms to the specification.
 
-TODO: write more complete and detailed documentation; make a less messy implementation, ideally in a performance language like
-Rust or C.
+The Python implementation is really sloppily written, so I'm currently refactoring it in Rust. You can see the progress on that 
+endeavour in the directory /tma-16-rs/.
 
 If someone wrote a C compiler for the TMA-16, I think it'd be just the coolest thing ever.
 
