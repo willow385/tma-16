@@ -13,6 +13,22 @@ too far from running native machine code.
 For those of you more concerned with seeing the TMA-16 actually work immediately,
 head on up to the parent directory and run the very hacky,
 badly-written, quick-and-dirty Python implementation.
+
+IMPORTANT TODO: Document all of the implementation-specific options that this
+implementation of the TMA-16 has. Also finish writing the part to show an animated
+display of the internals. Also write a lot more comments.
+*/
+
+/*
+___       _   __   _  ___   _        ___   |
+ |  |\/| |_) /  \ |_)  |   /_\  |\ |  |    |
+_|_ |  | |   \__/ | \  |  |   | | \|  |    .
+
+This implementation is VERY BUGGY!!! It does NOT behave exactly as the standard
+says it should, even though all 0x19 instructions are implemented. Once the
+animated internal state diagram is implemented, hopefully we can gain a clear enough
+understanding of the bugs to fix them.
+
 */
 
 use std::env;
@@ -70,7 +86,11 @@ fn main() -> Result<(), String> {
     };
 
     // Whether or not to print out the instructions one by one.
+    // This is presumably faster than calling contains_option() each loop.
     let list_instructions = contains_option(&args_vec, String::from("--list"));
+
+    // Whether or not to print the contents of the registers and stack.
+    let state_report = contains_option(&args_vec, String::from("--report"));
 
     'execute: loop {
         let inst_addr = machine.ip as usize;
@@ -92,7 +112,6 @@ fn main() -> Result<(), String> {
                         addr_space[inst_addr + 2]
                     )
                 );
-                machine._ip_inc(3);
             },
 
             0x02 => {
@@ -199,12 +218,97 @@ fn main() -> Result<(), String> {
                 break 'execute;
             },
 
+            0x10 => {
+                machine.push(addr_space[inst_addr + 1]);
+                machine._ip_inc(2);
+            },
+
+            0x11 => {
+                if addr_space[inst_addr + 1] == 0x0E {
+                    machine.pop(0x0E);
+                } else {
+                    machine.pop(addr_space[inst_addr + 1]);
+                    machine._ip_inc(2);
+                }
+            },
+
+            0x12 => {
+                machine.ovrf(addr_space[inst_addr + 1]);
+                machine._ip_inc(2);
+            },
+
+            0x13 => {
+                machine.clrovr();
+                machine._ip_inc(1);
+            },
+
+            0x14 => {
+                machine.readr(
+                    addr_space[inst_addr + 1],
+                    addr_space[inst_addr + 2],
+                    &addr_space
+                );
+                machine._ip_inc(3);
+            },
+
+            0x15 => {
+                machine.inc(addr_space[inst_addr + 1]);
+                machine._ip_inc(2);
+            },
+
+            0x16 => {
+                machine.dec(addr_space[inst_addr + 1]);
+                machine._ip_inc(2);
+            },
+
+            0x17 => {
+                machine.writr(
+                    addr_space[inst_addr + 1],
+                    addr_space[inst_addr + 2],
+                    &mut addr_space
+                );
+                machine._ip_inc(3);
+            },
+
+            0x18 => {
+                machine.bsl(addr_space[inst_addr + 1]);
+                machine._ip_inc(2);
+            },
+
+            0x19 => {
+                machine.bsr(addr_space[inst_addr + 1]);
+                machine._ip_inc(2);
+            },
+
             _ => hardware_exception("unrecognized/unimplemented instruction"
                     .to_string())
         }
     }
 
-    println!("{}", machine.stdout);
+    // TODO: implement animated internal state diagram like the Python one has.
+
+    if state_report {
+        println!("RA: {:x?}", machine.ra);
+        println!("RB: {:x?}", machine.rb);
+        println!("RC: {:x?}", machine.rc);
+        println!("RD: {:x?}", machine.rd);
+
+        print!("Stack:");
+        for byte in machine.stack.iter() {
+            print!(" {:x?}", byte);
+        }
+        print!("\n");
+
+        if machine.stack_flag != 0 {
+            println!("Stack overflow flag was set");
+        }
+    }
+
+    for c in machine.stdout.chars() {
+        print!("{}", c);
+    }
+
+    println!("");
 
     Ok(())
 }

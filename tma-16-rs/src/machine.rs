@@ -127,12 +127,9 @@ impl Tma16 {
         }
     }
 
-    // read: copy the value at a 16-bit memory address into a register.
+    // read: copy the 8-bit value at a 16-bit memory address into a register.
     pub fn read(&mut self, reg: u8, address: u16, address_space: &Vec<u8>) {
-        *self.reg_ptr(reg).unwrap() = combine_bytes(
-            address_space[address as usize],
-            address_space[(address + 1) as usize]
-        );
+        *self.reg_ptr(reg).unwrap() = address_space[address as usize] as u16;
     }
 
     // write: copy the value in a register into main memory.
