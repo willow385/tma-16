@@ -2,6 +2,9 @@
 */*.tmx
 */windows_pleb/*.tmx
 
+# nano swapfiles
+*/*.swp
+
 # rust crap
 **/Cargo.lock
 target/
