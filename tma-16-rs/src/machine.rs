@@ -2,28 +2,27 @@ pub mod functions;
 pub use crate::functions::*;
 
 // Struct in which the machine's state is held.
-#[derive(Default)]
 pub struct Tma16 {
     // registers
-    ra: u16,
-    rb: u16,
-    rc: u16,
-    rd: u16,
+    pub ra: u16,
+    pub rb: u16,
+    pub rc: u16,
+    pub rd: u16,
 
     // instruction pointer
-    ip: u16,
+    pub ip: u16,
 
     // stack
-    stack: [u16; 16],
-    stack_pointer: u8,
+    pub stack: [u16; 16],
+    pub stack_pointer: u8,
 
     // stack flag
-    stack_flag: u8,
+    pub stack_flag: u8,
 
     // other important stuff
-    current_instruction: u8,
-    stdout: String,
-    line_height: u32,
+    pub current_instruction: u8,
+    pub stdout: String,
+    pub line_height: u32,
 }
 
 impl Tma16 {
@@ -129,7 +128,7 @@ impl Tma16 {
     }
 
     // read: copy the value at a 16-bit memory address into a register.
-    pub fn read(&mut self, reg: u8, address: u16, address_space: Vec<u8>) {
+    pub fn read(&mut self, reg: u8, address: u16, address_space: &Vec<u8>) {
         *self.reg_ptr(reg).unwrap() = combine_bytes(
             address_space[address as usize],
             address_space[(address + 1) as usize]
@@ -225,7 +224,7 @@ impl Tma16 {
     }
 
     // readr: read from a memory address stored in a register.
-    pub fn readr(&mut self, reg_0: u8, reg_1: u8, address_space: Vec<u8>) {
+    pub fn readr(&mut self, reg_0: u8, reg_1: u8, address_space: &Vec<u8>) {
         self.read(reg_0, self.reg_val(reg_1).unwrap(), address_space);
     }
 

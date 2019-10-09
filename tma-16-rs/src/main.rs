@@ -40,7 +40,8 @@ fn get_tmx_name(args: Vec<String>) -> Result<String, &'static str> {
 fn contains_poor_option(args: Vec<String>) -> bool {
     for arg in args {
         if arg == "-p" || arg == "--poor" {
-            return true; // didn't even know Rust had a `return` keyword before today lol
+            return true;
+            // didn't even know Rust had a 'return` keyword before today lol
         }
     }
 
@@ -53,25 +54,99 @@ fn main() -> Result<(), String> {
     /* never thought I'd be using `.map_err(|e| e.to_string())?` with a
        function I wrote myself lol */
     let tmx_filename = get_tmx_name(args_vec).map_err(|e| e.to_string())?;
-    let file_buf = fs::read(&tmx_filename).unwrap();
+    let mut addr_space = fs::read(&tmx_filename).unwrap();
+    let mut machine = Tma16 {
+        ra: 0,
+        rb: 0,
+        rc: 0,
+        rd: 0,
+        ip: 0,
+        stack: [0; 16],
+        stack_pointer: 0,
+        stack_flag: 0,
+        current_instruction: 0,
+        stdout: String::from(""),
+        line_height: 0,
+    };
 
-    /* Haven't yet implemented the actual gotdamn machine yet, so for now all this does
-       is hexdump .tmx files, which isn't totally useless but... eh. */
-/*    println!("{}", tmx_filename);
-    for i in file_buf {
-        if i < 0x10 {
-            println!("0{:x?}", i);
-        } else {
-            println!("{:x?}", i);
+    'execute: loop {
+        let inst_addr = machine.ip as usize;
+        machine.current_instruction = addr_space[inst_addr];
+        match machine.current_instruction {
+            0x01 => {
+                machine.jmp(
+                    combine_bytes(
+                        addr_space[inst_addr + 1],
+                        addr_space[inst_addr + 2]
+                    )
+                );
+                machine._ip_inc(3);
+            },
+
+            0x02 => {
+                machine.jeq(
+                    addr_space[inst_addr + 1],
+                    addr_space[inst_addr + 2],
+                    combine_bytes(
+                        addr_space[inst_addr + 3],
+                        addr_space[inst_addr + 4]
+                    ),
+                    5 // default amount by which to increment ip
+                );
+            },
+
+            0x03 => {
+                machine.jgr(
+                    addr_space[inst_addr + 1],
+                    addr_space[inst_addr + 2],
+                    combine_bytes(
+                        addr_space[inst_addr + 3],
+                        addr_space[inst_addr + 4]
+                    ),
+                    5
+                );
+            },
+
+            0x04 => {
+                machine.add(addr_space[inst_addr + 1], addr_space[inst_addr + 2]);
+                machine._ip_inc(3);
+            },
+
+            0x05 => {
+                machine.sub(addr_space[inst_addr + 1], addr_space[inst_addr + 2]);
+                machine._ip_inc(3);
+            },
+
+            0x06 => {
+                machine.read(
+                    addr_space[inst_addr + 1],
+                    combine_bytes(
+                        addr_space[inst_addr + 2],
+                        addr_space[inst_addr + 3]
+                    ),
+                    &addr_space
+                );
+                machine._ip_inc(4);
+            },
+
+            0x07 => {
+                machine.write(
+                    addr_space[inst_addr + 1],
+                    combine_bytes(
+                        addr_space[inst_addr + 2],
+                        addr_space[inst_addr + 3]
+                    ),
+                    &mut addr_space
+                );
+                machine._ip_inc(4);
+            },
+            
+            // TODO: instructions 0x08 through 0x19
+
+            _ => hardware_exception("unrecognized/unimplemented instruction"
+                    .to_string())
         }
     }
-*/
-
-    let mut my_byte: u16 = 1;
-    my_byte <<= 15;
-    println!("{}", my_byte);
-    my_byte <<= 1;
-    println!("{}", my_byte);
 
     Ok(())
 }
