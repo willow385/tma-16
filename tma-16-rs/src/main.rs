@@ -16,16 +16,16 @@ badly-written, quick-and-dirty Python implementation.
 */
 
 use std::env;
-use std::fs::File;
+// use std::fs::File;
 use std::fs;
-use std::io::Read;
+// use std::io::Read;
 
 pub mod machine;
 pub use machine::*;
-use crate::machine::byte_index;
+// use crate::machine::byte_index;
 
 // Function to get the name of the executable from command-line args.
-fn get_tmx_name(args: Vec<String>) -> Result<String, &'static str> {
+fn get_tmx_name(args: &Vec<String>) -> Result<String, &'static str> {
     for arg in args {
         if arg.contains(".tmx") {
             return Ok(String::from(arg));
@@ -35,11 +35,10 @@ fn get_tmx_name(args: Vec<String>) -> Result<String, &'static str> {
     Err("no filename ending in `.tmx` was passed")
 }
 
-/* Function to check for the `poor` terminal option which is used to tell the
-   TMA-16 to only use ASCII chars. */
-fn contains_poor_option(args: Vec<String>) -> bool {
+/* Function to check whether the args contain a certain string. */
+fn contains_option(args: &Vec<String>, option: String) -> bool {
     for arg in args {
-        if arg == "-p" || arg == "--poor" {
+        if *arg == option {
             return true;
             // didn't even know Rust had a 'return` keyword before today lol
         }
@@ -48,12 +47,13 @@ fn contains_poor_option(args: Vec<String>) -> bool {
     false
 }
 
+
 fn main() -> Result<(), String> {
     let args_vec: Vec<String> = env::args().collect();
 
     /* never thought I'd be using `.map_err(|e| e.to_string())?` with a
        function I wrote myself lol */
-    let tmx_filename = get_tmx_name(args_vec).map_err(|e| e.to_string())?;
+    let tmx_filename = get_tmx_name(&args_vec).map_err(|e| e.to_string())?;
     let mut addr_space = fs::read(&tmx_filename).unwrap();
     let mut machine = Tma16 {
         ra: 0,
@@ -69,15 +69,19 @@ fn main() -> Result<(), String> {
         line_height: 0,
     };
 
+    // Whether or not to print out the instructions one by one.
+    let list_instructions = contains_option(&args_vec, String::from("--list"));
+
     'execute: loop {
         let inst_addr = machine.ip as usize;
         machine.current_instruction = addr_space[inst_addr];
 
-        // this next chunk is for debugging purposes only
-        if machine.current_instruction < 0x10 {
-            println!("Instruction: 0{:x?}", machine.current_instruction);
-        } else {
-            println!("Instruction: {:x?}", machine.current_instruction);
+        if list_instructions {
+            if machine.current_instruction < 0x10 {
+                println!("Instruction: 0{:x?}", machine.current_instruction);
+            } else {
+                println!("Instruction: {:x?}", machine.current_instruction);
+            }
         }
 
         match machine.current_instruction {
@@ -148,13 +152,59 @@ fn main() -> Result<(), String> {
                 );
                 machine._ip_inc(4);
             },
-            
-            // TODO: instructions 0x08 through 0x19
+
+            0x08 => {
+                machine.movr(addr_space[inst_addr + 1], addr_space[inst_addr + 2]);
+                machine._ip_inc(3);
+            },
+
+            0x09 => {
+                machine.movl(
+                    addr_space[inst_addr + 1],
+                    combine_bytes(
+                        addr_space[inst_addr + 2],
+                        addr_space[inst_addr + 3]
+                    )
+                );
+                machine._ip_inc(4);
+            },
+
+            0x0A => {
+                machine.and(addr_space[inst_addr + 1], addr_space[inst_addr + 2]);
+                machine._ip_inc(3);
+            },
+
+            0x0B => {
+                machine.or(addr_space[inst_addr + 1], addr_space[inst_addr + 2]);
+                machine._ip_inc(3);
+            },
+
+            0x0C => {
+                machine.xor(addr_space[inst_addr + 1], addr_space[inst_addr + 2]);
+                machine._ip_inc(3);
+            },
+
+            0x0D => {
+                machine.not(addr_space[inst_addr + 1]);
+                machine._ip_inc(2);
+            },
+
+            0x0E => {
+                machine.out(addr_space[inst_addr + 1]);
+                machine._ip_inc(2);
+            },
+
+            0x0F => {
+                machine.halt();
+                break 'execute;
+            },
 
             _ => hardware_exception("unrecognized/unimplemented instruction"
                     .to_string())
         }
     }
+
+    println!("{}", machine.stdout);
 
     Ok(())
 }

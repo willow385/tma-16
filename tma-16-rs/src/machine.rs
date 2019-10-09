@@ -171,14 +171,17 @@ impl Tma16 {
 
     // not: perform a bitwise NOT operation on a register.
     pub fn not(&mut self, reg: u8) {
-        *self.reg_ptr(reg).unwrap() = (1 << 16) - 1 - self.reg_val(reg).unwrap();
+        let one_bsl_16 = ((1 << 16) - 1) as u16;
+        *self.reg_ptr(reg).unwrap() = one_bsl_16 - self.reg_val(reg).unwrap();
     }
 
     /* Gotta say, Rust can get pretty verbose when you implement error handling... */
 
     // out: print a character to stdout.
-    pub fn out(&mut self, character: char) {
-        self.stdout.push(character);
+    pub fn out(&mut self, reg: u8) {
+        self.stdout.push(
+            self.reg_val(reg).unwrap() as u8 as char // kinda hacky, fix later?
+        );
     }
 
     // halt: end the program.
