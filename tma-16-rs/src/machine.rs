@@ -85,7 +85,7 @@ impl Tma16 {
 
     /* The following functions are invoked by the virtual machine whenever it reads
      a valid TMA-16 machine code instruction.
-     
+
      For enhanced readability, pretend that all the `.unwrap()`s aren't there.   */
 
     // jmp: unconditionally change the instruction pointer.
@@ -141,7 +141,7 @@ impl Tma16 {
     values larger than 255 can't be written to a memory address, even though those
     values are taken from 16-bit registers. Easiest fix would be NOTABUGWONTFIX,
     but probably not the best permanent solution. */
-    pub fn write(&mut self, reg: u8, address: u16, mut address_space: Vec<u8>) {
+    pub fn write(&self, reg: u8, address: u16, address_space: &mut Vec<u8>) {
         address_space[address as usize] = self.reg_val(reg).unwrap() as u8;
     }
 
@@ -172,7 +172,7 @@ impl Tma16 {
 
     // not: perform a bitwise NOT operation on a register.
     pub fn not(&mut self, reg: u8) {
-        *self.reg_ptr(reg).unwrap() != self.reg_val(reg).unwrap();
+        *self.reg_ptr(reg).unwrap() = (1 << 16) - 1 - self.reg_val(reg).unwrap();
     }
 
     /* Gotta say, Rust can get pretty verbose when you implement error handling... */
@@ -202,7 +202,7 @@ impl Tma16 {
     }
 
     // pop: pop a byte from the stack into a register.
-    pub fn pop(&mut self, reg: u8, jump_distance: u16) {
+    pub fn pop(&mut self, reg: u8) {
         if reg == 0x0E {
             self.ip = self.stack[self.stack_pointer as usize];
         } else {
@@ -214,5 +214,43 @@ impl Tma16 {
         }
     }
 
-    // TODO: write functions for instructions 0x12 through 0x19
+    // ovrf: check the value of the stack flag to see if there's been an overflow.
+    pub fn ovrf(&mut self, reg: u8) {
+        *self.reg_ptr(reg).unwrap() = self.stack_flag as u16;
+    }
+
+    // clrovr: set the stack flag to zero.
+    pub fn clrovr(&mut self) {
+        self.stack_flag = 0;
+    }
+
+    // readr: read from a memory address stored in a register.
+    pub fn readr(&mut self, reg_0: u8, reg_1: u8, address_space: Vec<u8>) {
+        self.read(reg_0, self.reg_val(reg_1).unwrap(), address_space);
+    }
+
+    // inc: increment a register.
+    pub fn inc(&mut self, reg: u8) {
+        *self.reg_ptr(reg).unwrap() += 1;
+    }
+
+    // dec: decrement a register.
+    pub fn dec(&mut self, reg: u8) {
+        *self.reg_ptr(reg).unwrap() -= 1;
+    }
+
+    // writr: write to a memory location specified by a register's value.
+    pub fn writr(&self, reg_0: u8, reg_1: u8, address_space: &mut Vec<u8>) {
+        self.write(reg_0, self.reg_val(reg_1).unwrap(), address_space);
+    }
+
+    // bsl: bitshift a register left by 1.
+    pub fn bsl(&mut self, reg: u8) {
+        *self.reg_ptr(reg).unwrap() <<= 1;
+    }
+
+    // bsr: bitshift a register right by 1.
+    pub fn bsr(&mut self, reg: u8) {
+        *self.reg_ptr(reg).unwrap() >>= 1;
+    }
 }
