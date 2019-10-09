@@ -8,7 +8,7 @@ movl    rb      64                 ; number of times to loop
 xor     rc      rc                 ; loop counter
 
 ; LOOP_REPEAT_POINT is here
-bsl     ra
+bsl     ra ; instruction to bitshift left
 bsl     ra
 bsl     ra
 bsl     ra
