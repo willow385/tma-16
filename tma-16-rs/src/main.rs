@@ -19,18 +19,6 @@ implementation of the TMA-16 has. Also finish writing the part to show an animat
 display of the internals. Also write a lot more comments.
 */
 
-/*
-___       _   __   _  ___   _        ___   |
- |  |\/| |_) /  \ |_)  |   /_\  |\ |  |    |
-_|_ |  | |   \__/ | \  |  |   | | \|  |    .
-
-This implementation is VERY BUGGY!!! It does NOT behave exactly as the standard
-says it should, even though all 0x19 instructions are implemented. Once the
-animated internal state diagram is implemented, hopefully we can gain a clear enough
-understanding of the bugs to fix them.
-
-*/
-
 use std::env;
 // use std::fs::File;
 use std::fs;
