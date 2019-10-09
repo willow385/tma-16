@@ -72,6 +72,14 @@ fn main() -> Result<(), String> {
     'execute: loop {
         let inst_addr = machine.ip as usize;
         machine.current_instruction = addr_space[inst_addr];
+
+        // this next chunk is for debugging purposes only
+        if machine.current_instruction < 0x10 {
+            println!("Instruction: 0{:x?}", machine.current_instruction);
+        } else {
+            println!("Instruction: {:x?}", machine.current_instruction);
+        }
+
         match machine.current_instruction {
             0x01 => {
                 machine.jmp(
