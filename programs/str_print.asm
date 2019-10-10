@@ -1,6 +1,6 @@
 ; program to print a hardcoded string to the TMA-16's stdout
 
-#define STRING_START_PTR 0x001F ; the address of the string's first character
+#define STRING_START_PTR 0x001B ; the address of the string's first character
 #define HALT_OP_ADDRESS  0x0019 ; the program's exit point
 #define READR_OP_ADDRESS 0x0008 ; an address we'll need to jump back to repeatedly
 
@@ -83,5 +83,6 @@ pb      122
 pb      111
 pb      110
 pb      101
+pb      10
 pb      0
 
