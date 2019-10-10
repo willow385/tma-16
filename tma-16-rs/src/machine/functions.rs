@@ -28,7 +28,7 @@ pub fn byte_index(index: u8, byte: u16) -> Result<u8, ()> {
             .to_string()));
     }
 
-    let bit: u8 = (byte >> (index as u16)) as u8;
+    let bit: u8 = ((byte >> (index as u16)) & (1 as u16)) as u8;
     Ok(bit)
 }
 

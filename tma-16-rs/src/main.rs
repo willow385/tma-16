@@ -19,6 +19,7 @@ display of the internals.
 
 use std::env;
 use std::fs;
+use std::{thread, time};
 
 pub mod machine;
 pub use machine::*;
@@ -46,6 +47,15 @@ fn contains_option(args: &Vec<String>, option: String) -> bool {
     false
 }
 
+// Function to get the time delay option.
+fn get_time_delay(args: &Vec<String>) -> u64 {
+    if contains_option(args, String::from("--delay")) {
+        let delay_arg_index = args.iter().position(|a| a == "--delay").unwrap();
+        args[delay_arg_index + 1].parse::<u64>().unwrap()
+    } else {
+        0
+    }
+}
 
 fn main() -> Result<(), String> {
     // First we put the command-line args into a vector of strings.
@@ -70,7 +80,7 @@ fn main() -> Result<(), String> {
         stack_flag: 0,
         current_instruction: 0,
         stdout: String::from(""),
-        line_height: 0,
+        line_height: 24,
     };
 
     // This arg tells us whether or not to print out the instructions one by one.
@@ -80,17 +90,28 @@ fn main() -> Result<(), String> {
     // This arg tells us whether or not to print the contents of the registers and stack.
     let state_report = contains_option(&args_vec, String::from("--report"));
 
+    // This arg tells us whether or not to show an animated diagram of the machine's state.
+    let display_not_suppressed = !contains_option(&args_vec, String::from("--no-display"));
+
+    /* Parse the args for the "--delay" option. If none is passed, or "--delay 0" is passed,
+    we won't be delaying at all. */
+    let time_delay = time::Duration::from_millis(get_time_delay(&args_vec) * 100);
+
     /* This is the fetch-decode-execute loop, although not quite, since decode and execute
     aren't two separate things in this implementation. */
     'execute: loop {
+        thread::sleep(time_delay);
+
+        if display_not_suppressed { poor_print_machine(&machine) };
+
         let inst_addr = machine.ip as usize; // For indexing the program's main memory.
         machine.current_instruction = addr_space[inst_addr];
 
         if list_instructions {
             if machine.current_instruction < 0x10 {
-                println!("Instruction: 0{:x?}", machine.current_instruction);
+                println!("Instruction: 0{:X?}", machine.current_instruction);
             } else {
-                println!("Instruction: {:x?}", machine.current_instruction);
+                println!("Instruction: {:X?}", machine.current_instruction);
             }
         }
 
@@ -337,33 +358,37 @@ fn main() -> Result<(), String> {
             _ => hardware_exception("unrecognized/unimplemented instruction"
                     .to_string())
         }
+
+        if display_not_suppressed { clear_screen(&machine) };
     }
 
     // TODO: implement animated internal state diagram like the Python implementation has.
 
     /* Whatever was output to the TMA-16's serial tty, print it to the host machine's actual
     standard output. */
-    for c in machine.stdout.chars() {
-        print!("{}", c);
+    if !display_not_suppressed {
+        for c in machine.stdout.chars() {
+            print!("{}", c);
+        }
     }
 
     /* Print out a description of the machine's internal state at the time it halted if the option
     "--report" was passed on the command line. */
     if state_report {
         if machine.ip < 0x10 {
-            println!("Program terminated at address 0{:x?} with no errors", machine.ip);
+            println!("Program terminated at address 0{:X?} with no errors", machine.ip);
         } else {
-            println!("Program terminated at address {:x?} with no errors", machine.ip);
+            println!("Program terminated at address {:X?} with no errors", machine.ip);
         }
         
-        println!("RA: {:x?}", machine.ra);
-        println!("RB: {:x?}", machine.rb);
-        println!("RC: {:x?}", machine.rc);
-        println!("RD: {:x?}", machine.rd);
+        println!("RA: {:X?}", machine.ra);
+        println!("RB: {:X?}", machine.rb);
+        println!("RC: {:X?}", machine.rc);
+        println!("RD: {:X?}", machine.rd);
 
         print!("Stack:");
         for byte in machine.stack.iter() {
-            print!(" {:x?}", byte);
+            print!(" {:X?}", byte);
         }
         print!("\n");
 
@@ -375,13 +400,71 @@ fn main() -> Result<(), String> {
     Ok(())
 }
 
-/*
-    Rust won't let you do a naive implementation of anything.
-    It forces you to write very robust, high-quality code.
-    I'm still not sure if that's an entirely good thing for all cases;
-    it certainly makes Rust a terrible choice for introducing someone
-    to programming, for example. But overall it's probably for the best
-    that, if people are going to write systems-level (and even kernel-level)
-    code in pure, safe Rust, they *can't* write a hacky, quick-and-dirty
-    implementation.
-*/
+// Function to convert a 16-bit value to a 4-digit hexadecimal representation
+fn hex_to_str(hex: u16) -> String {
+    if hex > 0xFFF {
+        String::from(format!("{:X?}", hex))
+    } else if hex > 0xFF {
+        String::from(format!("0{:X?}", hex))
+    } else if hex > 0xF {
+        String::from(format!("00{:X?}", hex))
+    } else {
+        String::from(format!("000{:X?}", hex))
+    }
+}
+
+// Function to go back up to redraw the diagram
+fn clear_screen(m: &Tma16) {
+    for _i in 0..(m.line_height) {
+        print!("\x1b[A");
+    }
+}
+
+// Function to print a diagram of the machine's internals with ascii chars only
+fn poor_print_machine(m: &Tma16) {
+    println!("\r   Registers:");
+    println!("                Binary                Hex");
+
+    for reg_id in 0xA..0xE {
+        println!("   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ +----+");
+        print!("   |");
+        let mut i: i8 = 15;
+        while i >= 0 {
+            print!("{}|", byte_index(i as u8, m.reg_val(reg_id).unwrap()).unwrap());
+            i -= 1;
+        }
+        println!(" |{}|", hex_to_str(m.reg_val(reg_id).unwrap()));
+    }
+
+    println!("   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ +----+\n");
+    println!("Stack:");
+    for _i in 0..16 {
+        print!("+----");
+    }
+    print!("+\n|");
+    for byte in m.stack.iter() {
+        print!("{}|", hex_to_str(*byte));
+    }
+
+    if m.stack_flag == 1 {
+        println!(" STACK OVERFLOW");
+    } else {
+        println!("               "); // to overwrite "STACK OVERFLOW" if it was set
+    }
+    for _i in 0..16 {
+        print!("+----");
+    }
+    print!("+\n\n");
+    println!("                    +----+");
+    println!("Instruction Pointer |{}|", hex_to_str(m.ip));
+    println!("                    +----+");
+    println!("Current Instruction |{}|", hex_to_str(m.current_instruction as u16));
+    println!("                    +----+");
+    println!("Stdout:");
+    println!("{}", m.stdout);
+    for c in m.stdout.chars() {
+        if c == '\n' {
+            print!("\x1b[A");
+        }
+    }
+}
