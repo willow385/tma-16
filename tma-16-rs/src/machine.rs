@@ -182,13 +182,7 @@ impl Tma16 {
     }
 
     // halt: end the program.
-    pub fn halt(&self) {
-        if self.ip < 0x10 {
-            println!("Program terminated at address 0{:x?} with no errors", self.ip);
-        } else {
-            println!("Program terminated at address {:x?} with no errors", self.ip);
-        }
-    } // the VM is supposed to exit with code 0 immediately after this gets called
+    pub fn halt(&self) {} // the VM is supposed to exit with code 0 immediately after this gets called
 
     // push: push a byte onto the stack.
     pub fn push(&mut self, reg: u8) {
