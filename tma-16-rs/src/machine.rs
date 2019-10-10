@@ -202,6 +202,8 @@ impl Tma16 {
             *self.reg_ptr(reg).unwrap() = self.stack[self.stack_pointer as usize];
         }
 
+        self.stack[self.stack_pointer as usize] = 0;
+
         if self.stack_pointer > 0 {
             self.stack_pointer -= 1;
         }

@@ -95,7 +95,7 @@ fn main() -> Result<(), String> {
 
     /* Parse the args for the "--delay" option. If none is passed, or "--delay 0" is passed,
     we won't be delaying at all. */
-    let time_delay = time::Duration::from_millis(get_time_delay(&args_vec) * 100);
+    let time_delay = time::Duration::from_millis(get_time_delay(&args_vec));
 
     /* This is the fetch-decode-execute loop, although not quite, since decode and execute
     aren't two separate things in this implementation. */
