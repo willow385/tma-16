@@ -372,8 +372,6 @@ fn main() -> Result<(), String> {
         }
     }
 
-    println!("");
-
     Ok(())
 }
 
