@@ -1,1 +1,0 @@
-* take the changes made to the Unix implementation of the TMA-16 and apply them to the Windows implementation
