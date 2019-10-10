@@ -341,6 +341,12 @@ fn main() -> Result<(), String> {
 
     // TODO: implement animated internal state diagram like the Python implementation has.
 
+    /* Whatever was output to the TMA-16's serial tty, print it to the host machine's actual
+    standard output. */
+    for c in machine.stdout.chars() {
+        print!("{}", c);
+    }
+
     /* Print out a description of the machine's internal state at the time it halted if the option
     "--report" was passed on the command line. */
     if state_report {
@@ -364,12 +370,6 @@ fn main() -> Result<(), String> {
         if machine.stack_flag != 0 {
             println!("Stack overflow flag was set");
         }
-    }
-
-    /* Whatever was output to the TMA-16's serial tty, print it to the host machine's actual
-    standard output. */
-    for c in machine.stdout.chars() {
-        print!("{}", c);
     }
 
     println!("");
