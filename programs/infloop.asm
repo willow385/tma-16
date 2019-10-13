@@ -2,7 +2,7 @@
 
 ; Stack pushing loop
 movl    ra      STACK_SIZE      ; counter for how many times to push onto stack
-movl    rb      0xEEEE          ; value to push onto the stack
+movl    rb      0xCCCC          ; value to push onto the stack
 push    rb                      ; push it
 dec     ra                      ; decrement the counter
 jeq     ra rc   POP_OP_ADDRESS  ; if counter == 0, goto pop operation below
