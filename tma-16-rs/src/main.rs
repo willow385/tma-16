@@ -427,7 +427,7 @@ fn poor_print_machine(m: &Tma16) {
 
     for reg_id in 0xA..0xE {
         println!("   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ +----+");
-        print!("   |");
+        print!  ("R{:X?} |", reg_id);
         let mut i: i8 = 15;
         while i >= 0 {
             print!("{}|", byte_index(i as u8, m.reg_val(reg_id).unwrap()).unwrap());
