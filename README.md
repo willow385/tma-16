@@ -14,9 +14,9 @@ like to be able to see what's going on you can slow down the execution. See `tma
 Building the machine (on *nix) is easy, provided your Rust toolchain is up-to-date:
   1. `cd tma-16-rs`
 
-  2. `cargo build`
+  2. `cargo build --release`
 
-And that's it! The path to the executable is `tma-16-rs/target/debug/tma-16-rs`. You can make an alias for it or move
+And that's it! The path to the executable is `tma-16-rs/target/release/tma-16-rs`. You can make an alias for it or move
 it into `/usr/bin` for greater ease of use.
 
 To use this virtual machine, do the following (assuming that `tma-16-rs` is in `/usr/bin` or is aliased):
