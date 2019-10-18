@@ -9,7 +9,7 @@ movl    rb      STRING_START_PTR ; address where the string starts
 readr   ra      rb               ; find the address pointed to by rb and store its value in ra
 jeq     ra rd   HALT_OP_ADDRESS  ; if it's '\0', then go to the `halt` instruction
 out     ra                       ; otherwise, print to stdout
-inc     rb                       ; inc string pointer by 2 since all numeric literals are 2 bytes wide
+inc     rb                       ; inc string pointer by 2 since char literals are 2 bytes wide
 inc     rb
 jmp     READR_OP_ADDRESS         ; go back to the "readr" instruction
 
@@ -18,11 +18,6 @@ halt
 
 ; Now you can put as many letters here as the TMA-16 can address!
 ; If you really wanted you could put almost 32KB of text here.
-
-; To be fair I cheated here. I didn't type these all out; I wrote
-; a 3-line Python script to do it for me. This is why I really should
-; build macros and syntactic sugar into the assembler.
-
 pb      'T'
 pb      'h'
 pb      'i'
