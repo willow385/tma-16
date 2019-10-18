@@ -196,6 +196,10 @@ impl Tma16 {
 
     // pop: pop a byte from the stack into a register.
     pub fn pop(&mut self, reg: u8) {
+        if self.stack_pointer > 0 {
+            self.stack_pointer -= 1;
+        }
+
         if reg == 0x0E {
             self.ip = self.stack[self.stack_pointer as usize];
         } else {
@@ -203,10 +207,6 @@ impl Tma16 {
         }
 
         self.stack[self.stack_pointer as usize] = 0;
-
-        if self.stack_pointer > 0 {
-            self.stack_pointer -= 1;
-        }
     }
 
     // ovrf: check the value of the stack flag to see if there's been an overflow.

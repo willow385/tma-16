@@ -6,8 +6,10 @@
 
 ; Macros for addresses
 #define FIRST_LOOP_REPEAT 0x0019
-#define PRINT_LETTER 0xBEEF
-#define PRINT_DIGIT_RET 0xB00B
+#define RETURN_ADDRESS_0  0x002B
+#define PRINT_DIGIT       0x002E
+#define PRINT_LETTER      0x004B
+#define PRINT_DIGIT_RET   0x005C
 
 ; Print the prefix
 movl    ra      '0'
@@ -21,14 +23,28 @@ movl    ra      NUMBER
 ; Push the number's original value on the stack
 push    ra
 ; The number on the stack is still also in ra. Let's get its first digit by
-; bitshifting right twelve times
+; bitshifting right twelve times.
 movl    rc      12
 xor     rd      rd
 bsr     ra
 dec     rc
-jgr     rc  rd  FIRST_LOOP_REPEAT
+jgr     rc  rd  FIRST_LOOP_REPEAT ; back to the bsr operation
 
-; TODO!!! Finish this! Call PRINT_DIGIT on each loop!
+    ;-----------------------------------------------;
+    ; Here I establish the calling convention for   ;
+    ; functions in TMA-16 Assembly. You must push   ;
+    ; the return address (where to go back to) onto ;
+    ; the stack so that it's at the top, then jump  ;
+    ; to the first op of the function. The function ;
+    ; then should pop the return address into the   ;
+    ; instruction pointer when it's done executing. ;
+    ;-----------------------------------------------;
+
+movl    rd      RETURN_ADDRESS_0  ; so that we know where to go back to
+push    rd
+jmp     PRINT_DIGIT
+
+pop     ra
 
 halt
 
