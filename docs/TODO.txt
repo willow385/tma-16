@@ -1,7 +1,5 @@
 TODO
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> Finish Rust implementation
-
 > Add #include directives and address labels
 
 > Consider implementing stdin

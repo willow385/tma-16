@@ -160,6 +160,27 @@ alloc n - this will result in n bytes, each equal to zero, being placed in the
           executable at this point. For example ``alloc 3'' will result in
           the bytes 00 00 00 appearing at that point.
 
+*** Syntactic Sugar ***
+Single char literals: a single char enclosed in single quotes (like 'B') equates
+to a 16-bit unsigned value representing that character's ascii value. So 'B' will
+become 0x0042. Supported escape characters include '\n', '\t', '\r', and '\s',
+the last of which represents a space because the assembler divides tokens by
+whitespace and I'm too lazy to make it able to parse whitespace in literals.
+
+In other words, ' ' won't work. You have to use '\s'. If you don't like it then
+feel free to submit a pull request.
+
+Since representing ascii chars with 16 bits is suboptimal, you also have the
+option to use charwords. A charword consists of exactly two characters enclosed in
+double quotes, for example "pp" or "q\s" (the same escape sequences are supported
+as for chars). A charword represents the two characters as a single 16-bit value,
+with the most significant 8 bits representing the first char and the least
+significant 8 bits representing the second char. So "fu", for example,
+represents the number 0x6675.
+
+As of version 1.4 of the assembler you can't use #define with chars or charwords,
+but this will be fixed later.
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If you encounter a bug in the implementation, or you have a suggestion for a

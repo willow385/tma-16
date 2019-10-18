@@ -1,9 +1,5 @@
-# TODO: add macros and make it so that you can jump to a location without having to know its exact address
-
-# UPDATE 30 September 2019: this assembler now supports "#define", allowing you to create global constants
-# in your assembly programs.
-
-# This is version 1.3 of the assembler
+#!/usr/bin/python3
+# This is version 1.4 of the assembler
 
 import sys
 import re
@@ -61,6 +57,10 @@ def is_hex_literal(token):
     return re.match(r"^0x[0-9a-fA-F]+$", token)
 def is_bin_literal(token):
     return re.match(r"^0b[0-1]+$", token)
+def is_char_literal(token):
+    return re.match(r"^'.'|'\\[nstr]'$", token)
+def is_chword_literal(token):
+    return re.match(r'^".."|".\\[nstr]"|"\\[nstr]."|"\\[nstr]\\[nstr]"$', token)
 def is_reg_literal(token):
     if token in ["ra", "rb", "rc", "rd", "ip"]:
         return True
@@ -120,6 +120,107 @@ for token in tokens:
     elif is_bin_literal(token):
         machine_code_bytes.append(most_sig_8_bits(int(token[2:], 2)))
         machine_code_bytes.append(least_sig_8_bits(int(token[2:], 2)))
+
+    elif is_char_literal(token):
+        machine_code_bytes.append(0)
+        if token[1] != '\\':
+            machine_code_bytes.append(ord(token[1]))
+        elif token[2] == 'n':
+            machine_code_bytes.append(10)
+        elif token[2] == 't':
+            machine_code_bytes.append(11)
+        elif token[2] == 'r':
+            machine_code_bytes.append(13)
+        elif token[2] == 's':
+            machine_code_bytes.append(32)
+        else:
+            machine_code_bytes.append(ord(token[3]))
+
+    elif is_chword_literal(token):
+        if token[1] != '\\':
+            machine_code_bytes.append(ord(token[1]))
+            if token[2] != '\\':
+                machine_code_bytes.append(ord(token[2]))
+            elif token[3] == 'n':
+                machine_code_bytes.append(10)
+            elif token[3] == 't':
+                machine_code_bytes.append(11)
+            elif token[3] == 'r':
+                machine_code_bytes.append(13)
+            elif token[3] == 's':
+                machine_code_bytes.append(32)
+            else:
+                machine_code_bytes.append(ord(token[3]))
+        elif token[2] == 'n':
+            machine_code_bytes.append(10)
+            if token[3] != '\\':
+                machine_code_bytes.append(ord(token[3]))
+            elif token[4] == 'n':
+                machine_code_bytes.append(10)
+            elif token[4] == 't':
+                machine_code_bytes.append(11)
+            elif token[4] == 'r':
+                machine_code_bytes.append(13)
+            elif token[4] == 's':
+                machine_code_bytes.append(32)
+            else:
+                machine_code_bytes.append(ord(token[4]))
+        elif token[2] == 't':
+            machine_code_bytes.append(11)
+            if token[3] != '\\':
+                machine_code_bytes.append(ord(token[3]))
+            elif token[4] == 'n':
+                machine_code_bytes.append(10)
+            elif token[4] == 't':
+                machine_code_bytes.append(11)
+            elif token[4] == 'r':
+                machine_code_bytes.append(13)
+            elif token[4] == 's':
+                machine_code_bytes.append(32)
+            else:
+                machine_code_bytes.append(ord(token[4]))
+        elif token[2] == 'r':
+            machine_code_bytes.append(13)
+            if token[3] != '\\':
+                machine_code_bytes.append(ord(token[3]))
+            elif token[4] == 'n':
+                machine_code_bytes.append(10)
+            elif token[4] == 't':
+                machine_code_bytes.append(11)
+            elif token[4] == 'r':
+                machine_code_bytes.append(13)
+            elif token[4] == 's':
+                machine_code_bytes.append(32)
+            else:
+                machine_code_bytes.append(ord(token[4]))
+        elif token[2] == 's':
+            machine_code_bytes.append(32)
+            if token[3] != '\\':
+                machine_code_bytes.append(ord(token[3]))
+            elif token[4] == 'n':
+                machine_code_bytes.append(10)
+            elif token[4] == 't':
+                machine_code_bytes.append(11)
+            elif token[4] == 'r':
+                machine_code_bytes.append(13)
+            elif token[4] == 's':
+                machine_code_bytes.append(32)
+            else:
+                machine_code_bytes.append(ord(token[4]))
+        else:
+            machine_code_bytes.append(ord(token[2]))
+            if token[3] != '\\':
+                machine_code_bytes.append(ord(token[3]))
+            elif token[4] == 'n':
+                machine_code_bytes.append(10)
+            elif token[4] == 't':
+                machine_code_bytes.append(11)
+            elif token[4] == 'r':
+                machine_code_bytes.append(13)
+            elif token[4] == 's':
+                machine_code_bytes.append(32)
+            else:
+                machine_code_bytes.append(ord(token[4]))
 
     elif is_reg_literal(token):
         if token == "ra":
@@ -233,7 +334,7 @@ for token in tokens:
             machine_code_bytes.append(0x00)
 
     else:
-        print(f"error: {sys.argv[1]}: unrecognized operation `{token}`")
+        print(f"error: {sys.argv[1]}: unrecognized operation `{token}` (at {i-1})")
         exit(1)
     i += 1 # update index counter
 

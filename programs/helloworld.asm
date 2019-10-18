@@ -1,31 +1,31 @@
-movl    ra   72   ; 'H'
+; Hello world in TMA-16 Assembly (written for version 1.4 or later of the assembler)
+
+movl    ra   'H'
 out     ra
-movl    ra   101  ; 'e'
+movl    ra   'e'
 out     ra
-movl    ra   108  ; 'l'
+movl    ra   'l'
 out     ra
-movl    ra   108  ; 'l'
+movl    ra   'l'
 out     ra
-movl    ra   111  ; 'o'
+movl    ra   'o'
 out     ra
-movl    ra   44   ; ','
+movl    ra   ','
 out     ra
-movl    ra   32   ; ' '
+movl    ra   '\s'
 out     ra
-movl    ra   119  ; 'w'
+movl    ra   'w'
 out     ra
-movl    ra   111  ; 'o'
+movl    ra   'o'
 out     ra
-movl    ra   114  ; 'r'
+movl    ra   'r'
 out     ra
-movl    ra   108  ; 'l'
+movl    ra   'l'
 out     ra
-movl    ra   100  ; 'd'
+movl    ra   'd'
 out     ra
-movl    ra   33   ; '!'
+movl    ra   '!'
 out     ra
-movl    ra   10   ; '\n'
+movl    ra   '\n'
 out     ra
 halt
-
-; TODO: implement string and char literals in the assembler
