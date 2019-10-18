@@ -8,11 +8,11 @@ jmp     0x000D
 
 ; Now let's put the word "HELLO" in the executable using pb ("put byte")
 ; Remember when aligning addresses that sizeof(int) on the TMA-16 is 2 bytes.
-pb      72
-pb      69      ; nice
-pb      76
-pb      76
-pb      79
+pb      'H'
+pb      'E'
+pb      'L'
+pb      'L'
+pb      'O'
 
 ; move literal (movl) - move a literal integer value into a register
 movl    ra      0b11010 ; this `movl' op will be the 0xDth byte of the executable

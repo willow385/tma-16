@@ -26,14 +26,14 @@ halt                       ; if ra != EXPECTED_RESULT then we exit here
 
 ; if we got here, then it must mean that ra contains the EXPECTED_RESULT, and that
 ; our program therefore successfully multiplied MULT_OPERAND_0 by MULT_OPERAND_1
-movl    rd   68            ; 'D'
+movl    rd   'D'
 out     rd
-movl    rd   79            ; 'O'
+movl    rd   'O'
 out     rd
-movl    rd   78            ; 'N'
+movl    rd   'N'
 out     rd
-movl    rd   69            ; 'E'
+movl    rd   'E'
 out     rd
-movl    rd   10            ; newline
+movl    rd   '\n'
 out     rd
 halt
