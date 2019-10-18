@@ -34,7 +34,7 @@ def parse_reg_id(hex_val):
     elif hex_val == 0x0E:
         return "ip"
     else:
-        return f"; invalid regid {hex(hex_val)}"
+        return f"; unexpected byte {hex(hex_val)} found; might be a bug in the disassembler"
 
 i = 0
 while i < len(instructions):

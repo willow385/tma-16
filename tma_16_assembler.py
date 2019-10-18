@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-# This is version 1.4 of the assembler
+# This is version 1.5 of the assembler
 
 import sys
 import re
@@ -133,6 +133,8 @@ for token in tokens:
             machine_code_bytes.append(13)
         elif token[2] == 's':
             machine_code_bytes.append(32)
+        elif token[2] == '0':
+            machine_code_bytes.append(0)
         else:
             machine_code_bytes.append(ord(token[3]))
 
@@ -149,6 +151,8 @@ for token in tokens:
                 machine_code_bytes.append(13)
             elif token[3] == 's':
                 machine_code_bytes.append(32)
+            elif token[3] == '0':
+                machine_code_bytes.append(0)
             else:
                 machine_code_bytes.append(ord(token[3]))
         elif token[2] == 'n':
@@ -163,6 +167,8 @@ for token in tokens:
                 machine_code_bytes.append(13)
             elif token[4] == 's':
                 machine_code_bytes.append(32)
+            elif token[4] == '0':
+                machine_code_bytes.append(0)
             else:
                 machine_code_bytes.append(ord(token[4]))
         elif token[2] == 't':
@@ -177,6 +183,8 @@ for token in tokens:
                 machine_code_bytes.append(13)
             elif token[4] == 's':
                 machine_code_bytes.append(32)
+            elif token[4] == '0':
+                machine_code_bytes.append(0)
             else:
                 machine_code_bytes.append(ord(token[4]))
         elif token[2] == 'r':
@@ -191,6 +199,8 @@ for token in tokens:
                 machine_code_bytes.append(13)
             elif token[4] == 's':
                 machine_code_bytes.append(32)
+            elif token[4] == '0':
+                machine_code_bytes.append(0)
             else:
                 machine_code_bytes.append(ord(token[4]))
         elif token[2] == 's':
@@ -219,6 +229,8 @@ for token in tokens:
                 machine_code_bytes.append(13)
             elif token[4] == 's':
                 machine_code_bytes.append(32)
+            elif token[4] == '0':
+                machine_code_bytes.append(0)
             else:
                 machine_code_bytes.append(ord(token[4]))
 

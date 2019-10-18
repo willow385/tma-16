@@ -163,8 +163,8 @@ alloc n - this will result in n bytes, each equal to zero, being placed in the
 *** Syntactic Sugar ***
 Single char literals: a single char enclosed in single quotes (like 'B') equates
 to a 16-bit unsigned value representing that character's ascii value. So 'B' will
-become 0x0042. Supported escape characters include '\n', '\t', '\r', and '\s',
-the last of which represents a space because the assembler divides tokens by
+become 0x0042. Supported escape characters include '\n', '\t', '\r', '\0', and
+'\s', the last of which represents a space because the assembler divides tokens by
 whitespace and I'm too lazy to make it able to parse whitespace in literals.
 
 In other words, ' ' won't work. You have to use '\s'. If you don't like it then
@@ -178,8 +178,7 @@ with the most significant 8 bits representing the first char and the least
 significant 8 bits representing the second char. So "fu", for example,
 represents the number 0x6675.
 
-As of version 1.4 of the assembler you can't use #define with chars or charwords,
-but this will be fixed later.
+As of version 1.5 of the assembler you can use #define with chars and charwords.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
