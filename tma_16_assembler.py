@@ -58,9 +58,9 @@ def is_hex_literal(token):
 def is_bin_literal(token):
     return re.match(r"^0b[0-1]+$", token)
 def is_char_literal(token):
-    return re.match(r"^'.'|'\\[nstr]'$", token)
+    return re.match(r"^'.'|'\\[nstr0]'$", token)
 def is_chword_literal(token):
-    return re.match(r'^".."|".\\[nstr]"|"\\[nstr]."|"\\[nstr]\\[nstr]"$', token)
+    return re.match(r'^".."|".\\[nstr0]"|"\\[nstr0]."|"\\[nstr0]\\[nstr0]"$', token)
 def is_reg_literal(token):
     if token in ["ra", "rb", "rc", "rd", "ip"]:
         return True
