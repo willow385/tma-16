@@ -4,7 +4,7 @@
 
 OPTION          BEHAVIOUR
 
---delay n       Sleep for n milliseconds before executing each instruction.
+--delay <n>     Sleep for <n> milliseconds before executing each instruction.
 
 --list          List the instructions as they are being executed, one by one.
                 Recommended to use only when paired with the option "--no-display".
@@ -14,3 +14,6 @@ OPTION          BEHAVIOUR
 
 --report        Print a report of the machine's internal state when execution
                 finishes. 
+
+-x <filename>   Instead of parsing command-line args for an executable ending
+                with `.tmx`, the machine will simply execute the contents of <filename>.

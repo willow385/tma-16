@@ -61,8 +61,19 @@ fn main() -> Result<(), String> {
     // First we put the command-line args into a vector of strings.
     let args_vec: Vec<String> = env::args().collect();
 
+    // Check for the option to run an executable that doesn't end in `.tmx`
+    let x_option = contains_option(&args_vec, String::from("-x"));
+
+    let tmx_filename = if x_option {
+        let ex_arg_index = args_vec.iter().position(|a| a == "-x").unwrap();
+        args_vec[ex_arg_index + 1].to_string()
+    } else {
+        get_tmx_name(&args_vec).map_err(|e| e.to_string())?
+    };
+
+
     // Then we parse the args to get the name of the executable we want to run.
-    let tmx_filename = get_tmx_name(&args_vec).map_err(|e| e.to_string())?;
+//    let tmx_filename = get_tmx_name(&args_vec).map_err(|e| e.to_string())?;
 
     /* We read the file's contents into a vector of unsigned bytes, which will be
     used as the "address space" in which the machine's main memory resides. */
