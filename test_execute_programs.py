@@ -1,5 +1,6 @@
 """"
-    test assembler
+    Program to test the TMA-16 Assembler with pytest.
+    Written by Romain Pesche.
 """
 
 import re
@@ -15,7 +16,7 @@ from tma_16_assembler import assemble
 def check_vm_executable():
     vm_location = Path('tma-16-rs/target/debug/tma-16-rs')
     if not vm_location.exists():
-        pytest.skip("No rust VM available, please run :  cd tma-16-rs && cargo build --release")
+        pytest.skip("No rust VM available, please run :  cd tma-16-rs && cargo build")
 
 
 
