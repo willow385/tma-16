@@ -34,8 +34,11 @@ def launch_asm(source_file):
         '--report'], capture_output=True)
     assert res
 
-    stdout = res.stdout.decode('utf-8')
-    stderr = res.stderr.decode('utf-8')
+
+    # The way the TMA-16 does I/O is a little funky due to the abundance of control characters
+    # used to avoid having to use curses.
+    stdout = res.stdout.decode('utf-8').replace('\x1b[A', '')
+    stderr = res.stderr.decode('utf-8').replace('\x1b[A', '')
     return stdout, stderr
 
 
@@ -75,7 +78,7 @@ def test_program_execution(source_file, result):
 def test_program_with_exception(source_file, thread, error):
 
     report_string, error_string = launch_asm(source_file)
-    assert not report_string
+    assert not report_string.replace('\n', '')
 
     match = re.match(r"thread '(.*)' panicked at '(.*)',", error_string)
 

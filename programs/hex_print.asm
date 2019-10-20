@@ -153,7 +153,7 @@ push    ra
 movl    rb      0x30         ; we can clobber this since it's already pushed
 add     ra      rb           ; ra now contains our ascii value
 out     ra                   ; print the ascii val of the number
-pop     ra                   
+pop     ra
 pop     rb
 jmp     PRINT_DIGIT_RET
 ; PRINT_LETTER:

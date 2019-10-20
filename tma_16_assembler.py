@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-# This is version 1.5 of the assembler
+# This is version 1.6 of the assembler
 
 import sys
 import re
@@ -321,6 +321,9 @@ def assemble(input_file, output_file=None):
 
         elif token == "bsr": # bitshift right
             machine_code_bytes.append(0x19)
+
+        elif token == "get": # get a character
+            machine_code_bytes.append(0x20)
 
         elif token == "pb": # put byte (not an instruction, just an assembler directive to write a byte at that position)
             pass

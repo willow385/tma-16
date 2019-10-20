@@ -135,6 +135,10 @@ OD 0X          | not rX           | Performs a bitwise NOT operation on register
                |                  | underflowing bits are truncated. The
                |                  | instruction pointer is then incremented by 2.
 ---------------+------------------+-----------------------------------------------
+20 0X          | get rX           | Take a single character from an input device
+               |                  | and store it in the specified register, then
+               |                  | increment the instruction pointer by 2.
+---------------+------------------+-----------------------------------------------
 
 
 *** Assembler Directives ***

@@ -1,3 +1,9 @@
+extern crate termios;
+extern crate libc;
+use std::io;
+use std::io::Read;
+use std::io::Write;
+use termios::{Termios, TCSANOW, ECHO, ICANON, tcsetattr};
 use std::process;
 
 /**
@@ -42,4 +48,28 @@ pub fn byte_index(index: u8, byte: u16) -> Result<u8, ()> {
 pub fn combine_bytes(byte_0: u8, byte_1: u8) -> u16 {
     let byte_0_shifted: u16 = (byte_0 as u16) << 8;
     byte_0_shifted | (byte_1 as u16)
+}
+
+/**
+ * Function to get a single char from stdin.
+ *
+ * Copied from here: https://stackoverflow.com/a/37416107/10942736
+ *
+ * @return whatever character the user just typed
+ */
+pub fn retrieve_char() -> u8 {
+    let stdin = libc::STDIN_FILENO;
+    let termios = Termios::from_fd(stdin).unwrap();
+    let mut new_termios = termios.clone();
+    new_termios.c_lflag &= !(ICANON | ECHO);
+    tcsetattr(stdin, TCSANOW, &mut new_termios).unwrap();
+    let stdout = io::stdout();
+    let mut reader = io::stdin();
+    let mut buffer = [0;1];  // read exactly one byte
+
+    stdout.lock().flush().unwrap();
+    reader.read_exact(&mut buffer).unwrap();
+
+    tcsetattr(stdin, TCSANOW, & termios).unwrap();
+    buffer[0]
 }

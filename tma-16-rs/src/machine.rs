@@ -248,4 +248,9 @@ impl Tma16 {
     pub fn bsr(&mut self, reg: u8) {
         *self.reg_ptr(reg).unwrap() >>= 1;
     }
+
+    // get: take a single character input and store it in a register.
+    pub fn get(&mut self, reg: u8) {
+        *self.reg_ptr(reg).unwrap() = retrieve_char() as u16;
+    }
 }

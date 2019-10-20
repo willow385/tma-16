@@ -104,6 +104,10 @@ fn main() -> Result<(), String> {
     // This arg tells us whether or not to show an animated diagram of the machine's state.
     let display_not_suppressed = !contains_option(&args_vec, String::from("--no-display"));
 
+    if !display_not_suppressed {
+        machine.line_height = 1;
+    }
+
     /* Parse the args for the "--delay" option. If none is passed, or "--delay 0" is passed,
     we won't be delaying at all. */
     let time_delay = time::Duration::from_millis(get_time_delay(&args_vec));
@@ -113,7 +117,11 @@ fn main() -> Result<(), String> {
     'execute: loop {
         thread::sleep(time_delay);
 
-        if display_not_suppressed { poor_print_machine(&machine) };
+        if display_not_suppressed {
+            poor_print_machine(&machine);
+        } else {
+            print_machine_no_display(&machine);
+        }
 
         let inst_addr = machine.ip as usize; // For indexing the program's main memory.
         machine.current_instruction = addr_space[inst_addr];
@@ -363,24 +371,30 @@ fn main() -> Result<(), String> {
                 machine._ip_inc(2);
             },
 
+            // Get: take an input character and stash it in a register.
+            0x20 => {
+                machine.get(addr_space[inst_addr + 1]);
+                machine._ip_inc(2);
+            },
+
             /* If the currently selected instruction isn't a number from 0x01 to 0x19, then it's
             not a valid TMA-16 machine instruction, so it's time to trigger a hardware
             exception and dump the core. */
-            _ => hardware_exception("unrecognized/unimplemented instruction"
-                    .to_string())
+            _ => hardware_exception(
+                    format!(
+                        "unrecognized/unimplemented instruction {:X}",
+                        machine.current_instruction
+                    ).to_string())
         }
 
-        if display_not_suppressed { clear_screen(&machine) };
+        clear_screen(&machine);
+
     }
 
-    // TODO: implement animated internal state diagram like the Python implementation has.
-
-    /* Whatever was output to the TMA-16's serial tty, print it to the host machine's actual
-    standard output. */
-    if !display_not_suppressed {
-        for c in machine.stdout.chars() {
-            print!("{}", c);
-        }
+    // Print the stdout.
+    print!("\x1b[A");
+    for c in machine.stdout.chars() {
+        print!("{}", c);
     }
 
     /* Print out a description of the machine's internal state at the time it halted if the option
@@ -391,7 +405,7 @@ fn main() -> Result<(), String> {
         } else {
             println!("Program terminated at address {:X?} with no errors", machine.ip);
         }
-        
+
         println!("RA: {:X?}", machine.ra);
         println!("RB: {:X?}", machine.rb);
         println!("RC: {:X?}", machine.rc);
@@ -428,6 +442,16 @@ fn hex_to_str(hex: u16) -> String {
 fn clear_screen(m: &Tma16) {
     for _i in 0..(m.line_height) {
         print!("\x1b[A");
+    }
+}
+
+// Function to print stdin/stdout but no diagram
+fn print_machine_no_display(m: &Tma16) {
+    println!("{}", m.stdout);
+    for c in m.stdout.chars() {
+        if c == '\n' {
+            print!("\x1b[A");
+        }
     }
 }
 
