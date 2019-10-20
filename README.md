@@ -1,4 +1,7 @@
 # tma-16
+
+[![CircleCI](https://circleci.com/gh/DanteFalzone0/tma-16/tree/master.svg?style=svg)](https://circleci.com/gh/DanteFalzone0/tma-16/tree/master)
+
 A Thouroughly Minimalist Architecture (16-bit)
 
 The TMA-16 is a 16-bit computer of my own design, with a very limited instruction set (only 25 opcodes!).
