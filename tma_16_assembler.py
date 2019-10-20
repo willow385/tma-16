@@ -232,98 +232,15 @@ def assemble(input_file, output_file=None):
                     machine_code_bytes.append(ord(token[4]))
 
         elif is_reg_literal(token):
-            if token == "ra":
-                machine_code_bytes.append(0x0A)
-
-            elif token == "rb":
-                machine_code_bytes.append(0x0B)
-
-            elif token == "rc":
-                machine_code_bytes.append(0x0C)
-
-            elif token == "rd":
-                machine_code_bytes.append(0x0D)
-
-            elif token == "ip":
-                machine_code_bytes.append(0x0E)
-
-        elif token == "jmp": # unconditional jump
-            machine_code_bytes.append(0x01)
-
-        elif token == "jeq": # jump-if-equal
-            machine_code_bytes.append(0x02)
-
-        elif token == "jgr": # jump-if-greater
-            machine_code_bytes.append(0x03)
-
-        elif token == "add":
-            machine_code_bytes.append(0x04)
-
-        elif token == "sub":
-            machine_code_bytes.append(0x05)
-
-        elif token == "read": # read from memory
-            machine_code_bytes.append(0x06)
-
-        elif token == "write": # write to memory
-            machine_code_bytes.append(0x07)
-
-        elif token == "movr": # move register
-            machine_code_bytes.append(0x08)
-
-        elif token == "movl": # move literal
-            machine_code_bytes.append(0x09)
-
-        elif token == "and":
-            machine_code_bytes.append(0x0A)
-
-        elif token == "or":
-            machine_code_bytes.append(0x0B)
-
-        elif token == "xor":
-            machine_code_bytes.append(0x0C)
-
-        elif token == "not":
-            machine_code_bytes.append(0x0D)
-
-        elif token == "out": # print to stdout
-            machine_code_bytes.append(0x0E)
-
-        elif token == "halt":
-            machine_code_bytes.append(0x0F) # the actual opcode
-
-        elif token == "push":
-            machine_code_bytes.append(0x10)
-
-        elif token == "pop":
-            machine_code_bytes.append(0x11)
-
-        elif token == "ovrf": # check the stack overflow flag
-            machine_code_bytes.append(0x12)
-
-        elif token == "clrovr": # clear the stack overflow flag
-            machine_code_bytes.append(0x13)
-
-        elif token == "readr": # read from an address from a register
-            machine_code_bytes.append(0x14)
-
-        elif token == "inc": # increment
-            machine_code_bytes.append(0x15)
-
-        elif token == "dec": # decrement
-            machine_code_bytes.append(0x16)
-
-        elif token == "writr": # write to an address from a register
-            machine_code_bytes.append(0x17)
-
-        elif token == "bsl": # bitshift left
-            machine_code_bytes.append(0x18)
-
-        elif token == "bsr": # bitshift right
-            machine_code_bytes.append(0x19)
-
-        elif token == "pb": # put byte (not an instruction, just an assembler directive to write a byte at that position)
-            pass
+            reg_token_to_bytes = {
+                'ra': 0x0A,
+                'rb': 0x0B,
+                'rc': 0x0C,
+                'rd': 0x0D,
+                'ip': 0x0E,
+            }
+            reg_bytes = reg_token_to_bytes[token]
+            machine_code_bytes.append(reg_bytes)
 
         elif token == "alloc": # allocate (assembler directive to allocate a certain amount of memory)
             mem_amount = 0
@@ -343,8 +260,45 @@ def assemble(input_file, output_file=None):
                 machine_code_bytes.append(0x00)
 
         else:
-            print(f"error: {input_file}: unrecognized operation `{token}` (at {i-1})")
-            exit(1)
+
+            inst_token_to_byte = {
+                'jmp': 0x01,     # unconditional jump
+                'jeq': 0x02,     # jump-if-equal
+                'jgr': 0x03,     # jump-if-greater
+                'add': 0x04,
+                'sub': 0x05,
+                'read': 0x06,    # read from memory
+                'write': 0x07,   # write to memory
+                'movr': 0x08,    # move register
+                'movl': 0x09,    # mov literal
+                'and': 0x0A,
+                'or': 0x0B,
+                'xor': 0x0C,
+                'not': 0x0D,
+                'out': 0x0E,     # print to stdout
+                'halt': 0x0F,
+                'push': 0x10,
+                'pop': 0x11,
+                'ovrf': 0x12,    # check the stack overflow flag
+                'clrovr': 0x13,  # clear the stack overflow flag
+                'readr': 0x14,   # read from an address from a register
+                'inc': 0x15,     # increment
+                'dec': 0x16,     # increment
+                'writr': 0x17,   # write to an address from a register
+                'bsl':  0x18,    # bitshift left
+                'bsr':  0x19,    # bitshift right
+                'pb':  None,     # put byte (not an instruction, just an assembler directive to write a byte at that position)
+            }
+
+            try:
+                byte_token = inst_token_to_byte[token]
+            except KeyError:
+                print(f"error: {input_file}: unrecognized operation `{token}` (at {i-1})")
+                exit(1)
+
+            if byte_token:
+                machine_code_bytes.append(byte_token)
+
         i += 1 # update index counter
 
 
