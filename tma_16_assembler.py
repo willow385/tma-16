@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-# This is version 1.5 of the assembler
+# This is version 1.6 of the assembler
 
 import sys
 import re
@@ -287,6 +287,7 @@ def assemble(input_file, output_file=None):
                 'writr': 0x17,   # write to an address from a register
                 'bsl':  0x18,    # bitshift left
                 'bsr':  0x19,    # bitshift right
+                'get': 0x20,     # get input
                 'pb':  None,     # put byte (not an instruction, just an assembler directive to write a byte at that position)
             }
 
