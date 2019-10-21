@@ -14,7 +14,7 @@ color cyan "0b[0-1]+"
 color brightmagenta "(ra|rb|rc|rd|ip)"
 
 ## Keywords
-color green "(jmp|jeq|jgr|read|write|movr|movl|out|halt|push|pop|ovrf|clrovr|readr|writr)"
+color green "(jmp|jeq|jgr|read|write|movr|movl|out|get|halt|push|pop|ovrf|clrovr|readr|writr)"
 color yellow "(add|sub|and|or|xor|not|inc|dec|bsl|bsr)"
 
 ## Assembler directives
