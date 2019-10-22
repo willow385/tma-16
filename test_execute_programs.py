@@ -35,10 +35,8 @@ def launch_asm(source_file):
     assert res
 
 
-    # The way the TMA-16 does I/O is a little funky due to the abundance of control characters
-    # used to avoid having to use curses.
-    stdout = res.stdout.decode('utf-8').replace('\x1b[A', '')
-    stderr = res.stderr.decode('utf-8').replace('\x1b[A', '')
+    stdout = res.stdout.decode('utf-8')
+    stderr = res.stderr.decode('utf-8')
     return stdout, stderr
 
 

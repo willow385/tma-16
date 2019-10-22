@@ -104,10 +104,6 @@ fn main() -> Result<(), String> {
     // This arg tells us whether or not to show an animated diagram of the machine's state.
     let display_not_suppressed = !contains_option(&args_vec, String::from("--no-display"));
 
-    if !display_not_suppressed {
-        machine.line_height = 1;
-    }
-
     /* Parse the args for the "--delay" option. If none is passed, or "--delay 0" is passed,
     we won't be delaying at all. */
     let time_delay = time::Duration::from_millis(get_time_delay(&args_vec));
@@ -119,8 +115,6 @@ fn main() -> Result<(), String> {
 
         if display_not_suppressed {
             poor_print_machine(&machine);
-        } else {
-            print_machine_no_display(&machine);
         }
 
         let inst_addr = machine.ip as usize; // For indexing the program's main memory.
@@ -282,6 +276,9 @@ fn main() -> Result<(), String> {
             // Output: print the value in a register as an ascii char to stdout.
             0x0E => {
                 machine.out(addr_space[inst_addr + 1]);
+                if !display_not_suppressed {
+                    print!("{}", machine.stdout.chars().last().unwrap());
+                }
                 machine._ip_inc(2);
             },
 
@@ -387,14 +384,17 @@ fn main() -> Result<(), String> {
                     ).to_string())
         }
 
-        clear_screen(&machine);
-
+        if display_not_suppressed {
+            clear_screen(&machine);
+        }
     }
 
     // Print the stdout.
-    print!("\x1b[A");
-    for c in machine.stdout.chars() {
-        print!("{}", c);
+    if display_not_suppressed {
+        print!("\x1b[A");
+        for c in machine.stdout.chars() {
+            print!("{}", c);
+        }
     }
 
     /* Print out a description of the machine's internal state at the time it halted if the option
@@ -445,6 +445,7 @@ fn clear_screen(m: &Tma16) {
     }
 }
 
+/*
 // Function to print stdin/stdout but no diagram
 fn print_machine_no_display(m: &Tma16) {
     println!("{}", m.stdout);
@@ -454,6 +455,7 @@ fn print_machine_no_display(m: &Tma16) {
         }
     }
 }
+*/
 
 // Function to print a diagram of the machine's internals with ascii chars only
 fn poor_print_machine(m: &Tma16) {
