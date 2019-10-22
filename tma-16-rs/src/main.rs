@@ -6,15 +6,6 @@ This implementation supports version 1.3 of the TMA-16 instruction set.
 
 This implementation runs TMA-16 machine code almost as fast as native code, thanks
 no doubt in large part to the Rust compiler's powerful optimization algorithm.
-
-This implementation doesn't YET have an animated internal state diagram like the
-original implementation does. If you want to see what's going on under the hood
-in real time, head on up to the parent directory and run the very hacky,
-badly-written, quick-and-dirty Python implementation.
-
-IMPORTANT TODO: Document all of the implementation-specific options that this
-implementation of the TMA-16 has. Also finish writing the part to show an animated
-display of the internals.
 */
 
 use std::env;
