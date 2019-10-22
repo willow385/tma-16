@@ -445,18 +445,6 @@ fn clear_screen(m: &Tma16) {
     }
 }
 
-/*
-// Function to print stdin/stdout but no diagram
-fn print_machine_no_display(m: &Tma16) {
-    println!("{}", m.stdout);
-    for c in m.stdout.chars() {
-        if c == '\n' {
-            print!("\x1b[A");
-        }
-    }
-}
-*/
-
 // Function to print a diagram of the machine's internals with ascii chars only
 fn poor_print_machine(m: &Tma16) {
     println!("\r   Registers:");
