@@ -8,7 +8,7 @@ Instruction set: v1.3
 
 [![CircleCI](https://circleci.com/gh/DanteFalzone0/tma-16/tree/master.svg?style=svg)](https://circleci.com/gh/DanteFalzone0/tma-16/tree/master)
 
-The TMA-16 is a 16-bit Von Neumann machine, with a very limited instruction set (only 26 opcodes!).
+The TMA-16 is a 16-bit Von Neumann machine, with a very limited instruction set (only 32 instructions!).
 It was created both as a teaching tool, to help people visualize computation at the lowest level, as well as a learning
 tool, to help the authors have a better grasp of low-level programming and a slightly easier Assembly language to practice with
 than x86 Assembly.
