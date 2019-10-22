@@ -5,6 +5,7 @@
 OPTION          BEHAVIOUR
 
 --delay <n>     Sleep for <n> milliseconds before executing each instruction.
+                (Not recommended for use with `--no-display`.)
 
 --list          List the instructions as they are being executed, one by one.
                 Recommended to use only when paired with the option "--no-display".
