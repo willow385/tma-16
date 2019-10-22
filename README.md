@@ -1,5 +1,8 @@
 # tma-16
 
+Assembler: v1.6
+Instruction set: v1.3
+
 [![CircleCI](https://circleci.com/gh/DanteFalzone0/tma-16/tree/master.svg?style=svg)](https://circleci.com/gh/DanteFalzone0/tma-16/tree/master)
 
 A Thouroughly Minimalist Architecture (16-bit)
@@ -36,5 +39,4 @@ If you would like to make tweaks to the TMA-16, or write a new implementation of
 The Rust implementation is very, very fast and is guaranteed to be memory safe. However, it doesn't yet have super robust error handling
 built into it; in many cases it will just panic if the `.tmx` file it's running has errors. This will hopefully be fixed soonish.
 
-If someone wrote a C compiler for the TMA-16, I think it'd be just the coolest thing ever. Not sure that porting `libc` to it would be
-super easy, though, since it's a pretty stripped-down 16-bit architecture with a tiny stack and only 4 registers.
+The first release will happen when `#include` directives and address labels are implemented in the assembler.
