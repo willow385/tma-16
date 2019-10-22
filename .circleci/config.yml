@@ -1,12 +1,10 @@
 version: 2
 jobs:
-  build:
+  tests:
     docker:
     - image: rust:latest
-
     steps:
       - checkout
-
       - run:
           name: install dependencies
           command: |
@@ -14,8 +12,28 @@ jobs:
               cargo build
               apt update
               apt install python3-pytest -y
-
       - run:
           name: run tests
           command: |
             python3 -m pytest test_execute_programs.py
+
+  lint:
+    docker:
+    - image: python:3.7
+    steps:
+      - checkout
+      - run:
+          name: install dependencies
+          command: pip install flake8
+      - run:
+          name: flake8 lint
+          command: flake8
+
+workflows:
+  version: 2
+  test_and_lint:
+    jobs:
+      - lint
+      - tests:
+          requires:
+              - lint
