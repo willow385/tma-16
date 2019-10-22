@@ -12,7 +12,7 @@ jmp     PUSH_OP_ADDRESS         ; else, go back up to push operation
 pop     rb                      ; take a byte off
 inc     ra                      ; increment counter
 movl    rd      STACK_SIZE      ; prepare this value for comparison
-jeq     ra rd   PUSH_OP_ADDRESS ; if counter == 15, goto push operation above
+jeq     ra rd   PUSH_OP_ADDRESS ; if counter == 16, goto push operation above
 jmp     POP_OP_ADDRESS          ; else, go back to pop operation
 
 ; No halt needed; this program runs indefinitely.
