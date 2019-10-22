@@ -186,8 +186,8 @@ impl Tma16 {
 
     // push: push a byte onto the stack.
     pub fn push(&mut self, reg: u8) {
-        self.stack[self.stack_pointer as usize] = self.reg_val(reg).unwrap();
-        if self.stack_pointer < 15 {
+        if self.stack_pointer < 16 {
+            self.stack[self.stack_pointer as usize] = self.reg_val(reg).unwrap();
             self.stack_pointer += 1;
         } else {
             self.stack_flag = 1;
