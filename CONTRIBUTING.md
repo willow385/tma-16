@@ -14,7 +14,7 @@ Contributing TMA-16 Assembly programs
 
 Contributing to the toolchain
 * The disassembler doesn't entirely work. I don't personally consider the disassembler a high priority but if you want to try to fix it go ahead.
-* The assembler *does* entirely work, but it is very badly written. I'm hoping to rewrite it at some point. Please feel free to submit a patch for it.
+* The assembler *does* entirely work, and is pretty well-written thanks to the efforts of Romain Pesche. It could be better, though - so submit a pull request if you've got an improvement to make.
 * If you want to write another program as part of the toolchain, feel free to submit a pull request. A linker and a debugger would be really cool, and I will get around to writing them *eventually* if no one else wants to. Don't hold your breath for it though.
 
 Everything else
