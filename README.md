@@ -1,12 +1,12 @@
 # tma-16
 
+A 16-bit Virtual Machine and its toolchain, written for educational purposes by Dante Falzone, Romain Pesche, and Lance McDonald.
+
 Assembler: v1.6
 
 Instruction set: v1.3
 
 [![CircleCI](https://circleci.com/gh/DanteFalzone0/tma-16/tree/master.svg?style=svg)](https://circleci.com/gh/DanteFalzone0/tma-16/tree/master)
-
-A Thouroughly Minimalist Architecture (16-bit)
 
 The TMA-16 is a 16-bit computer of my own design, with a very limited instruction set (only 25 opcodes!).
 It was created both as a teaching tool, to help people visualize computation at the lowest level, as well as a learning
