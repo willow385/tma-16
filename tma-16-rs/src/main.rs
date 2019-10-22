@@ -2,7 +2,7 @@
 
 Licensed under GNU GPL v3 or later version, as with all my other stuff.
 
-This implementation supports version 1.2 of the TMA-16 instruction set.
+This implementation supports version 1.3 of the TMA-16 instruction set.
 
 This implementation runs TMA-16 machine code almost as fast as native code, thanks
 no doubt in large part to the Rust compiler's powerful optimization algorithm.
