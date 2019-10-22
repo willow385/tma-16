@@ -19,8 +19,6 @@ def check_vm_executable():
         pytest.skip("No rust VM available, please run :  cd tma-16-rs && cargo build")
 
 
-
-
 def launch_asm(source_file):
 
     output_file = tempfile.NamedTemporaryFile(suffix=".tmx")
@@ -33,7 +31,6 @@ def launch_asm(source_file):
         '--no-display',
         '--report'], capture_output=True)
     assert res
-
 
     stdout = res.stdout.decode('utf-8')
     stderr = res.stderr.decode('utf-8')

@@ -6,7 +6,7 @@ import sys
 filename = ""
 no_file = True
 for arg in sys.argv:
-    if arg[-4:] == ".tmx": # extension for TMA executables
+    if arg[-4:] == ".tmx":  # extension for TMA executables
         filename = arg
         no_file = False
 if no_file:
@@ -15,12 +15,14 @@ if no_file:
 file_context = open(filename, "rb").read()
 instructions = bytearray(file_context)
 
+
 # This function takes two 8-bit bytes, interpreting the first as the
 # most significant and the second as the least significant portions
 # of a single 16-bit value.
 def combine_bytes(byte_0, byte_1):
     byte_0_shifted = byte_0 << 8
     return byte_0_shifted | byte_1
+
 
 def parse_reg_id(hex_val):
     if hex_val == 0x0A:
@@ -36,6 +38,7 @@ def parse_reg_id(hex_val):
     else:
         return f"; unexpected byte {hex(hex_val)} found; might be a bug in the disassembler"
 
+
 i = 0
 while i < len(instructions):
     if instructions[i] == 0x01:
@@ -47,7 +50,7 @@ while i < len(instructions):
               + parse_reg_id(instructions[i + 2]) + " "
               + hex(instructions[i + 3])
               + hex(instructions[i + 4])[2:]
-        )
+              )
         i += 5
     elif instructions[i] == 0x03:
         print("jgr "
@@ -55,64 +58,64 @@ while i < len(instructions):
               + parse_reg_id(instructions[i + 2]) + " "
               + hex(instructions[i + 3])
               + hex(instructions[i + 4])[2:]
-        )
+              )
         i += 5
     elif instructions[i] == 0x04:
         print("add "
               + parse_reg_id(instructions[i + 1]) + " "
               + parse_reg_id(instructions[i + 2])
-        )
+              )
         i += 3
     elif instructions[i] == 0x05:
         print("sub "
               + parse_reg_id(instructions[i + 1]) + " "
               + parse_reg_id(instructions[i + 2])
-        )
+              )
         i += 3
     elif instructions[i] == 0x06:
         print("read "
               + parse_reg_id(instructions[i + 1]) + " "
               + hex(instructions[i + 2])
               + hex(instructions[i + 3])[2:]
-        )
+              )
         i += 4
     elif instructions[i] == 0x07:
         print("write "
               + parse_reg_id(instructions[i + 1]) + " "
               + hex(instructions[i + 2])
               + hex(instructions[i + 3])[2:]
-        )
+              )
         i += 4
     elif instructions[i] == 0x08:
         print("movr "
               + parse_reg_id(instructions[i + 1]) + " "
               + parse_reg_id(instructions[i + 2])
-        )
+              )
         i += 3
     elif instructions[i] == 0x09:
         print("movl "
               + parse_reg_id(instructions[i + 1]) + " "
               + hex(instructions[i + 2])
               + hex(instructions[i + 3])[2:]
-        )
+              )
         i += 4
     elif instructions[i] == 0x0A:
         print("and "
               + parse_reg_id(instructions[i + 1]) + " "
               + parse_reg_id(instructions[i + 2])
-        )
+              )
         i += 3
     elif instructions[i] == 0x0B:
         print("or "
               + parse_reg_id(instructions[i + 1]) + " "
               + parse_reg_id(instructions[i + 2])
-        )
+              )
         i += 3
     elif instructions[i] == 0x0C:
         print("xor "
               + parse_reg_id(instructions[i + 1]) + " "
               + parse_reg_id(instructions[i + 2])
-        )
+              )
         i += 3
     elif instructions[i] == 0x0D:
         print("not " + parse_reg_id(instructions[i + 1]))
@@ -127,7 +130,7 @@ while i < len(instructions):
         print("push " + parse_reg_id(instructions[i + 1]))
         i += 2
     elif instructions[i] == 0x11:
-        print("pop "  + parse_reg_id(instructions[i + 1]))
+        print("pop " + parse_reg_id(instructions[i + 1]))
         i += 2
     elif instructions[i] == 0x12:
         print("ovrf " + parse_reg_id(instructions[i + 1]))
@@ -137,9 +140,9 @@ while i < len(instructions):
         i += 1
     elif instructions[i] == 0x14:
         print("readr "
-             + parse_reg_id(instructions[i + 1]) + " "
-             + parse_reg_id(instructions[i + 2])
-        )
+              + parse_reg_id(instructions[i + 1]) + " "
+              + parse_reg_id(instructions[i + 2])
+              )
         i += 3
     elif instructions[i] == 0x15:
         print("inc " + parse_reg_id(instructions[i + 1]))
@@ -149,21 +152,21 @@ while i < len(instructions):
         i += 2
     elif instructions[i] == 0x17:
         print("writr "
-             + parse_reg_id(instructions[i + 1]) + " "
-             + parse_reg_id(instructions[i + 2])
-        )
+              + parse_reg_id(instructions[i + 1]) + " "
+              + parse_reg_id(instructions[i + 2])
+              )
         i += 3
     elif instructions[i] == 0x18:
         print("bsl "
               + parse_reg_id(instructions[i + 1])
-        )
+              )
         i += 2
     elif instructions[i] == 0x19:
         print("bsr "
               + parse_reg_id(instructions[i + 1])
-        )
+              )
         i += 2
 
     else:
-        print(f"pb {hex(combine_bytes(instructions[i], instructions[i+1]))}") # XXX: allow putting single bytes?
+        print(f"pb {hex(combine_bytes(instructions[i], instructions[i+1]))}")  # XXX: allow putting single bytes?
         i += 2

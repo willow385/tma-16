@@ -4,6 +4,7 @@
 import sys
 import re
 
+
 # First we remove all the comments from the file
 def strip_comments(line):
     if ";" in line:
@@ -12,14 +13,15 @@ def strip_comments(line):
     else:
         return line
 
+
 # expand the macros
 def expand_macro_defs(token_list):
-    for i in range (0, len(token_list)):
+    for i in range(0, len(token_list)):
         try:
             if token_list[i] == "#define":
                 macro_name = token_list[i + 1]
-                macro_val  = token_list[i + 2]
-                for j in range (0, len(token_list)):
+                macro_val = token_list[i + 2]
+                for j in range(0, len(token_list)):
                     if token_list[j] == macro_name:
                         token_list[j] = macro_val
                 token_list[i] = ""
@@ -27,6 +29,7 @@ def expand_macro_defs(token_list):
                 token_list[i + 2] = ""
         except IndexError:
             continue
+
 
 # this part is mostly copied from Stack Overflow
 # https://stackoverflow.com/questions/32834963/most-significant-byte-calculation
@@ -43,32 +46,48 @@ def binary(i):
         i >>= 1
         count -= 1
     return s
+
+
 def most_sig_8_bits(val_16_bits):
     a = binary(val_16_bits)
     b = a[0:9]
-    c = int(b,2)
+    c = int(b, 2)
     return c
+
+
 def least_sig_8_bits(val_16_bits):
     a = binary(val_16_bits)
     b = a[9:17]
-    c = int(b,2)
+    c = int(b, 2)
     return c
+
 
 def is_int_literal(token):
     return re.match(r"^[0-9]+$", token)
+
+
 def is_hex_literal(token):
     return re.match(r"^0x[0-9a-fA-F]+$", token)
+
+
 def is_bin_literal(token):
     return re.match(r"^0b[0-1]+$", token)
+
+
 def is_char_literal(token):
     return re.match(r"^'.'|'\\[nstr0]'$", token)
+
+
 def is_chword_literal(token):
     return re.match(r'^".."|".\\[nstr0]"|"\\[nstr0]."|"\\[nstr0]\\[nstr0]"$', token)
+
+
 def is_reg_literal(token):
     if token in ["ra", "rb", "rc", "rd", "ip"]:
         return True
     else:
         return False
+
 
 def assemble(input_file, output_file=None):
 
@@ -84,13 +103,12 @@ def assemble(input_file, output_file=None):
             if token != '':
                 tokens.append(token)
 
-
     expand_macro_defs(tokens)
 
     # then we turn it into TMA-16 machine code
     machine_code_bytes = []
 
-    i = 0 # index of currently selected token
+    i = 0  # index of currently selected token
     for token in tokens:
         # The instruction set of the TMA-16 is based on a
         # pen-and-paper model I made earlier called the TMA-8. I
@@ -242,7 +260,7 @@ def assemble(input_file, output_file=None):
             reg_bytes = reg_token_to_bytes[token]
             machine_code_bytes.append(reg_bytes)
 
-        elif token == "alloc": # allocate (assembler directive to allocate a certain amount of memory)
+        elif token == "alloc":  # allocate (assembler directive to allocate a certain amount of memory)
             mem_amount = 0
             if is_int_literal(tokens[i + 1]):
                 mem_amount = int(tokens[i + 1])
@@ -254,9 +272,9 @@ def assemble(input_file, output_file=None):
                 print(f"error: {input_file}: invalid literal `{tokens[i + 1]}`")
                 exit(1)
 
-            tokens[i + 1] = "" # so we don't have a stray number in the code
+            tokens[i + 1] = ""  # so we don't have a stray number in the code
 
-            for i in range (0, mem_amount):
+            for i in range(0, mem_amount):
                 machine_code_bytes.append(0x00)
 
         else:
@@ -285,10 +303,11 @@ def assemble(input_file, output_file=None):
                 'inc': 0x15,     # increment
                 'dec': 0x16,     # increment
                 'writr': 0x17,   # write to an address from a register
-                'bsl':  0x18,    # bitshift left
-                'bsr':  0x19,    # bitshift right
+                'bsl': 0x18,    # bitshift left
+                'bsr': 0x19,    # bitshift right
                 'get': 0x20,     # get input
-                'pb':  None,     # put byte (not an instruction, just an assembler directive to write a byte at that position)
+                'pb': None,     # put byte
+                                 # (not an instruction, just an assembler directive to write a byte at that position)
             }
 
             try:
@@ -300,8 +319,7 @@ def assemble(input_file, output_file=None):
             if byte_token:
                 machine_code_bytes.append(byte_token)
 
-        i += 1 # update index counter
-
+        i += 1  # update index counter
 
     # now create the executable
     new_file_name = output_file or input_file[:-4] + ".tmx"
@@ -324,6 +342,7 @@ def assemble(input_file, output_file=None):
                 line_bytes += 1
         print("")
 
+
 def main():
     if len(sys.argv) < 2:
         print("Error! No assembly files input")
@@ -333,6 +352,7 @@ def main():
     input_file = sys.argv[1]
     output_file = sys.argv[2] if len(sys.argv) == 3 else None
     assemble(input_file, output_file)
+
 
 if __name__ == '__main__':
     main()
