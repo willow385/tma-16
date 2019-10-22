@@ -21,4 +21,4 @@ jmp     POP_OP_ADDRESS          ; else, go back to pop operation
 
 #define PUSH_OP_ADDRESS 0x0008 ; address of the push operation
 #define POP_OP_ADDRESS  0x0014 ; address of the pop operation
-#define STACK_SIZE          15 ; maximum number of bytes we want to push
+#define STACK_SIZE          16 ; maximum number of bytes we want to push
