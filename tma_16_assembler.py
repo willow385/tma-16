@@ -139,7 +139,7 @@ def instruction_size(token_list, i):
 
 # expand the address labels
 def expand_address_labels(token_list):
-    labels    = []
+    labels = []
     addresses = []
 
     # first we find all the labels
@@ -164,16 +164,13 @@ def expand_address_labels(token_list):
         # For every token until this address label...
         for j in range(0, token_list.index(labels[i])):
             if token_list[j] != "":
-                if token_list[j][0] != "@" and token_list[j][-1] != ":": # ...if that token is not a label...
+                if token_list[j][0] != "@" and token_list[j][-1] != ":":  # ...if that token is not a label...
                     # ...let the offset to this address be incremented appropriately.
                     current_label_address += instruction_size(token_list, j)
                 elif token_list[j][0] == "@" and token_list[j][-1] != ":":
                     current_label_address += 2
                 else:
                     continue
-
-        # this print statement was for debugging purposes
-#        print(f"Calculated address of {labels[i]} to be {hex(current_label_address)}")
         addresses.append(current_label_address)
 
     # The list "addresses" now contains the addresses referred to by the labels.
