@@ -176,7 +176,7 @@ def expand_address_labels(token_list):
     # The list "addresses" now contains the addresses referred to by the labels.
     for i in range(0, len(token_list)):
         if token_list[i] != "":
-            if token_list[i][0] == "@" and token_list[i][-1] != ":": # if the token is a label...
+            if token_list[i][0] == "@" and token_list[i][-1] != ":":  # if the token is a label...
                 selected_label = token_list[i] + ":"
                 try:
                     token_list[i] = str(addresses[labels.index(selected_label)])
@@ -189,7 +189,6 @@ def expand_address_labels(token_list):
         if token_list[i] != "":
             if token_list[i][0] == "@" and token_list[i][-1] == ":":
                 token_list[i] = ""
-    # We should be done now... but for debugging purposes let's check
 
 
 def assemble(input_file, output_file=None):
