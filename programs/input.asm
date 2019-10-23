@@ -1,7 +1,7 @@
 ; Program to get input from the user and print it back out.
 
-xor     rd      rd          ; Zero out rd for comparisons
-movl    ra      @prompt     ; Put a pointer to our string's first char in ra
+    xor     rd      rd          ; Zero out rd for comparisons
+    movl    ra      @prompt     ; Put a pointer to our string's first char in ra
 
 @print_prompt_char:
     readr   rb      ra          ; Fetch the character & stash in rb
@@ -14,12 +14,12 @@ movl    ra      @prompt     ; Put a pointer to our string's first char in ra
 @get_input:
     push    rd                  ; null char at the end
     movl    rb      '\n'        ; to check when the user is done typing
-    @input_loop:
-        get     ra              ; store whatever the user types next in ra
-        out     ra              ; let the user see what they just typed
-        jeq     ra  rb  @output ; user pressed enter? then we're done here
-        push    ra              ; else, put the string on the stack
-        jmp     @input_loop     ; get the next character
+@input_loop:
+    get     ra              ; store whatever the user types next in ra
+    out     ra              ; let the user see what they just typed
+    jeq     ra  rb  @output ; user pressed enter? then we're done here
+    push    ra              ; else, put the string on the stack
+    jmp     @input_loop     ; get the next character
 
 ; I am fully aware how easy it would be for the user to cause a stack overflow here.
 ; This program is meant to test the get operation, not to be robust.
