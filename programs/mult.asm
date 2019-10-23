@@ -5,10 +5,6 @@
 #define MULT_OPERAND_1      7
 #define EXPECTED_RESULT    21
 
-; don't change these two
-#define ADD_LOOP_START 0x000F ; address of the `add' operation
-#define STRING_PRINT   0x0023 ; address where we start printing to stdout
-
 movl    ra    MULT_OPERAND_0  ; first operand
 movl    rb    MULT_OPERAND_1  ; second operand
 movr    rc    ra              ; copy the original value of the first operand
