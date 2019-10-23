@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-# This is version 1.6 of the assembler
+# This is version 1.7 of the assembler
 
 import sys
 import re
@@ -89,6 +89,112 @@ def is_reg_literal(token):
         return False
 
 
+# function to find how many bytes an instruction is
+def instruction_size(token_list, i):
+    if token_list[i] == "":
+        return 0
+
+    # allocs are a special case
+    if token_list[i] == "alloc":
+        if is_int_literal(token_list[i + 1]):
+            return int(token_list[i + 1])
+
+        elif is_hex_literal(token_list[i + 1]):
+            return int(token_list[i + 1], 16)
+
+        elif is_bin_literal(token_list[i + 1]):
+            return int(token_list[i + 1][2:], 2)
+
+        else:
+            print(f"error: invalid int literal `{token_list[i + 1]}` for alloc")
+            exit(1)
+
+    # else it's pretty straightforward
+    try:
+        if is_int_literal(token_list[i]) and token_list[i - 1] != "alloc":
+            return 2
+
+        elif is_hex_literal(token_list[i]) and token_list[i - 1] != "alloc":
+            return 2
+
+        elif is_bin_literal(token_list[i]) and token_list[i - 1] != "alloc":
+            return 2
+
+        elif is_char_literal(token_list[i]):
+            return 2
+
+        elif is_chword_literal(token_list[i]):
+            return 2
+
+        elif token_list[i] != "pb" and token_list[i] != "alloc":
+            return 1
+
+        else:
+            return 0
+
+    except IndexError:
+        print(f"An unexpected IndexError appeared concerning token `{token_list[i]}`")
+        exit(1)
+
+
+# expand the address labels
+def expand_address_labels(token_list):
+    labels    = []
+    addresses = []
+
+    # first we find all the labels
+    for i in range(0, len(token_list)):
+        # label declarations will follow the form @LABEL:
+        if token_list[i] != "":
+            if token_list[i][0] == "@" and token_list[i][-1] == ":":
+                labels.append(token_list[i])
+
+    # we then check to see if there's any duplicates
+    for i in range(0, len(labels)):
+        for j in range(0, len(labels)):
+            # If they're not the same label but they contain the same chars
+            if i != j and labels[i] == labels[j]:
+                # then something's wrong
+                print(f"error: ambiguous label `{labels[i]}` found more than once")
+                exit(1)
+
+    # if there's no duplicates then we can start determining what address each label represents
+    for i in range(0, len(labels)):
+        current_label_address = 0
+        # For every token until this address label...
+        for j in range(0, token_list.index(labels[i])):
+            if token_list[j] != "":
+                if token_list[j][0] != "@" and token_list[j][-1] != ":": # ...if that token is not a label...
+                    # ...let the offset to this address be incremented appropriately.
+                    current_label_address += instruction_size(token_list, j)
+                elif token_list[j][0] == "@" and token_list[j][-1] != ":":
+                    current_label_address += 2
+                else:
+                    continue
+
+        # this print statement was for debugging purposes
+#        print(f"Calculated address of {labels[i]} to be {hex(current_label_address)}")
+        addresses.append(current_label_address)
+
+    # The list "addresses" now contains the addresses referred to by the labels.
+    for i in range(0, len(token_list)):
+        if token_list[i] != "":
+            if token_list[i][0] == "@" and token_list[i][-1] != ":": # if the token is a label...
+                selected_label = token_list[i] + ":"
+                try:
+                    token_list[i] = str(addresses[labels.index(selected_label)])
+                except ValueError:
+                    print(f"error searching for {selected_label}: no such label defined")
+                    exit(1)
+
+    # Now we strip the address label declarations out
+    for i in range(0, len(token_list)):
+        if token_list[i] != "":
+            if token_list[i][0] == "@" and token_list[i][-1] == ":":
+                token_list[i] = ""
+    # We should be done now... but for debugging purposes let's check
+
+
 def assemble(input_file, output_file=None):
 
     file_lines = open(input_file).read().split('\n')
@@ -104,6 +210,8 @@ def assemble(input_file, output_file=None):
                 tokens.append(token)
 
     expand_macro_defs(tokens)
+
+    expand_address_labels(tokens)
 
     # then we turn it into TMA-16 machine code
     machine_code_bytes = []

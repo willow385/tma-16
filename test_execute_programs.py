@@ -44,7 +44,7 @@ def launch_asm(source_file):
     ('programs/e.asm', ('E', '06', '45', '0', '0', '0', '0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0')),
     ('programs/mult.asm', ('DONE', '41', '15', '1', '3', 'A', '0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0')),
     ('programs/str_print.asm', ('This program was written in TMA-16 Assembly by Dante Falzone',
-                                '19', '0', '95', '0', '0', '0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0')),
+                                '1A', '0', '96', '0', '0', '0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0')),
 ])
 def test_program_execution(source_file, result):
 

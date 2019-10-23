@@ -21,6 +21,9 @@ color yellow "(add|sub|and|or|xor|not|inc|dec|bsl|bsr)"
 color blue "^[[:space:]]*#[[:space:]]*(define|undef|include|ifn?def|endif|elif|else|if|warning|error)"
 color blue "(pb|alloc)"
 
+## Address labels
+color brightblue "@[A-Za-z0-9_]+"
+
 ## Highlight comments
 color brightblack ";.*"
 

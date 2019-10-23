@@ -6,75 +6,70 @@
 #define NUMERATOR       12
 #define DENOMINATOR     4
 
-; memory addresses to which we jump - don't change these
-#define DIVIDE_BY_ZERO        0x004A
-#define DENOM_BIGGER_THAN_NUM 0x00A3
-#define LOOP_REPEAT           0x0019
-#define DONE                  0x002B
 
 movl    ra      NUMERATOR      ; value we compare against
 movl    rb      DENOMINATOR    ; value we add each loop
 movl    rc      0              ; we'll use rc to count how many times we've looped
 xor     rd      rd             ; we'll use this as an accumulator
 
-jeq     rb  rd  DIVIDE_BY_ZERO
-jgr     rb  ra  DENOM_BIGGER_THAN_NUM
+jeq     rb  rd  @divide_by_zero
+jgr     rb  ra  @denom_bigger_than_num
 
 ; The division algorithm here works by counting the number of times you
 ; have to add the denominator to itself to equal the numerator. Hence
 ; the denominator can't be higher than the numerator.
-; LOOP_REPEAT:
-jeq     rd  ra  DONE           ; if we've reached the numerator, we're done
-inc     rc                     ; add til we reach the number of times num goes into denom
-add     rd      rb             ; add to get up to the numerator     
-jgr     rd  ra  DONE           ; if we've gone past the numerator, it's not evenly divisible
-jmp     LOOP_REPEAT
+@loop_repeat:
+    jeq     rd  ra  @done          ; if we've reached the numerator, we're done
+    inc     rc                     ; add til we reach the number of times num goes into denom
+    add     rd      rb             ; add to get up to the numerator     
+    jgr     rd  ra  @done          ; if we've gone past the numerator, it's not evenly divisible
+    jmp     @loop_repeat
 
 
-; DONE:
-push    rc
-movl    rd      68
-out     rd
-movl    rd      79
-out     rd
-movl    rd      78
-out     rd
-movl    rd      69
-out     rd
-halt ; the result should now be on the top of the stack
+@done:
+    push    rc
+    movl    rd      68
+    out     rd
+    movl    rd      79
+    out     rd
+    movl    rd      78
+    out     rd
+    movl    rd      69
+    out     rd
+    halt ; the result should now be on the top of the stack
 
-; DIVIDE_BY_ZERO:
-movl    rd      68
-out     rd
-movl    rd      73
-out     rd
-movl    rd      86
-out     rd
-movl    rd      73
-out     rd
-movl    rd      68
-out     rd
-movl    rd      69
-out     rd
-movl    rd      32
-out     rd
-movl    rd      66
-out     rd
-movl    rd      89
-out     rd
-movl    rd      32
-out     rd
-movl    rd      90
-out     rd
-movl    rd      69
-out     rd
-movl    rd      82
-out     rd
-movl    rd      79
-out     rd
-halt
+@divide_by_zero:
+    movl    rd      68
+    out     rd
+    movl    rd      73
+    out     rd
+    movl    rd      86
+    out     rd
+    movl    rd      73
+    out     rd
+    movl    rd      68
+    out     rd
+    movl    rd      69
+    out     rd
+    movl    rd      32
+    out     rd
+    movl    rd      66
+    out     rd
+    movl    rd      89
+    out     rd
+    movl    rd      32
+    out     rd
+    movl    rd      90
+    out     rd
+    movl    rd      69
+    out     rd
+    movl    rd      82
+    out     rd
+    movl    rd      79
+    out     rd
+    halt
 
-; DENOM_BIGGER_THAN_NUM:
+@denom_bigger_than_num:
 movl    rd      68
 out     rd
 movl    rd      69

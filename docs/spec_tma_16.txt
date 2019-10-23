@@ -164,6 +164,23 @@ alloc n - this will result in n bytes, each equal to zero, being placed in the
           executable at this point. For example ``alloc 3'' will result in
           the bytes 00 00 00 appearing at that point.
 
+@label  - you can put a label anywhere in your code, following the form @<name>:
+          (an at-sign, followed by a valid identifier, followed by a colon) which
+          will result in @<name> being used to represent the address of the
+          instruction immediately after the label. For example the following:
+
+              @loop:
+                    inc     ra
+                    jgr     ra  rd  @loop
+
+          will increment register A, then repeat until it is greater than
+          register D.
+
+          This feature saves the programmer a huge headache with the error-prone
+          alternative (i.e. calculating addresses by hand) and allows greater
+          modularity and modifiability of code.
+
+
 *** Syntactic Sugar ***
 Single char literals: a single char enclosed in single quotes (like 'B') equates
 to a 16-bit unsigned value representing that character's ascii value. So 'B' will
