@@ -1,31 +1,22 @@
-; Hello world in TMA-16 Assembly (written for version 1.4 or later of the assembler)
+; Hello world in TMA-16 Assembly (written for version 1.8 or later of the assembler)
 
-movl    ra   'H'
-out     ra
-movl    ra   'e'
-out     ra
-movl    ra   'l'
-out     ra
-movl    ra   'l'
-out     ra
-movl    ra   'o'
-out     ra
-movl    ra   ','
-out     ra
-movl    ra   '\s'
-out     ra
-movl    ra   'w'
-out     ra
-movl    ra   'o'
-out     ra
-movl    ra   'r'
-out     ra
-movl    ra   'l'
-out     ra
-movl    ra   'd'
-out     ra
-movl    ra   '!'
-out     ra
-movl    ra   '\n'
-out     ra
-halt
+    movl    ra      @return_address     ; where to return from @print_string
+    push    ra
+    movl    ra      @string_ptr         ; where the string is
+    push    ra
+    jmp     @print_string
+
+@return_address:
+    halt
+
+@string_ptr:
+    pb      "He"
+    pb      "ll"
+    pb      "o,"
+    pb      "\sw"
+    pb      "or"
+    pb      "ld"
+    pb      "!\n"
+    pb      0
+
+#include "include_files/print.asm"

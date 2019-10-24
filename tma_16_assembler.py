@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-# This is version 1.7 of the assembler
+# This is version 1.8 of the assembler
 
 import sys
 import re
@@ -12,6 +12,21 @@ def strip_comments(line):
         return line[0:comment_token_index]
     else:
         return line
+
+
+# then include any included files
+def get_includes(decommented_line):
+    if "#include" not in decommented_line:
+        return decommented_line
+    else:
+        line_no_space = decommented_line.replace(" ", "").replace("\t", "")
+        # Probably not the best way to parse but I couldn't come up with a regex
+        filename = line_no_space[9:-1]
+        file_contents = open(filename).read().split('\n')
+        for line in file_contents:
+            line = strip_comments(line)
+            line = get_includes(line)  # recursively get other includes as well
+        return file_contents
 
 
 # expand the macros
@@ -196,7 +211,7 @@ def assemble(input_file, output_file=None):
     file_lines = open(input_file).read().split('\n')
     decommented_lines = []
     for line in file_lines:
-        decommented_lines.append(strip_comments(line))
+        decommented_lines.append(get_includes(strip_comments(line)))
 
     # then we tokenize it
     tokens = []
