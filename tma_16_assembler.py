@@ -1,8 +1,9 @@
 #!/usr/bin/python3
-# This is version 1.7 of the assembler
+# This is version 1.8 of the assembler
 
 import sys
 import re
+import os
 
 
 # First we remove all the comments from the file
@@ -12,6 +13,26 @@ def strip_comments(line):
         return line[0:comment_token_index]
     else:
         return line
+
+
+# then include any included files
+def get_includes(decommented_line, asm_path="./"):
+    if "#include" in decommented_line:
+        line_no_space = decommented_line.replace(" ", "").replace("\t", "")
+        # Probably not the best way to parse but I couldn't come up with a regex
+        filename = line_no_space[9:-1]
+
+        try:
+            file_contents = open(os.path.join(asm_path, filename)).read().split('\n')
+        except FileNotFoundError:
+            print(f"No file `{filename}` was found")
+            exit(1)
+
+        for line in file_contents:
+            line = strip_comments(line)
+            if get_includes(line):
+                line = strip_comments(get_includes(line))  # recursively get other includes as well
+        return file_contents
 
 
 # expand the macros
@@ -196,7 +217,15 @@ def assemble(input_file, output_file=None):
     file_lines = open(input_file).read().split('\n')
     decommented_lines = []
     for line in file_lines:
-        decommented_lines.append(strip_comments(line))
+        if get_includes(line, os.path.dirname(input_file)):
+            for subline in get_includes(line, os.path.dirname(input_file)):
+                decommented_lines.append(strip_comments(subline))
+        else:
+            decommented_lines.append(strip_comments(line))
+
+    if "-p" in sys.argv or "--preprocessor-output" in sys.argv:
+        for line in decommented_lines:
+            print(line)
 
     # then we tokenize it
     tokens = []

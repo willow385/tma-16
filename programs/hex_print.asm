@@ -2,6 +2,7 @@
 ; Choose the number to print by editing the following macro:
 #define NUMBER 0xBEEF
 
+@_main:
 ; Print the prefix
     movl    ra      '0'
     out     ra

@@ -24,6 +24,9 @@ color blue "(pb|alloc)"
 ## Address labels
 color brightblue "@[A-Za-z0-9_]+"
 
+## Charwords and string literals
+color yellow "["][^"]*[^\\]["]" "["]{3}.*[^\\]["]{3}"
+
 ## Highlight comments
 color brightblack ";.*"
 
