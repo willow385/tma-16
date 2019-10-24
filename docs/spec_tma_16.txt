@@ -181,6 +181,11 @@ alloc n - this will result in n bytes, each equal to zero, being placed in the
           modularity and modifiability of code.
 
 
+#include "some/file.asm" - the assembler will copy-paste the contents of
+                           some/file.asm verbatim at the point of the #include
+                           directive, printing an error message if no such file
+                           can be found.
+
 *** Syntactic Sugar ***
 Single char literals: a single char enclosed in single quotes (like 'B') equates
 to a 16-bit unsigned value representing that character's ascii value. So 'B' will

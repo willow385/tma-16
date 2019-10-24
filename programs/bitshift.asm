@@ -1,9 +1,10 @@
 ; Program to bitshift register a a bunch of times.
 ; Written to test the bitshift instruction.
 
-movl    ra      0b0001000100010001 ; number that we'll be bitshifting
-movl    rb      64                 ; number of times to loop
-xor     rc      rc                 ; loop counter
+@_main:
+    movl    ra      0b0001000100010001 ; number that we'll be bitshifting
+    movl    rb      64                 ; number of times to loop
+    xor     rc      rc                 ; loop counter
 
 @loop_repeat_point:
     bsl     ra ; instruction to bitshift left

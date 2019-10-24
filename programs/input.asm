@@ -1,29 +1,29 @@
 ; Program to get input from the user and print it back out.
 
-    xor     rd      rd          ; Zero out rd for comparisons
-    movl    ra      @prompt     ; Put a pointer to our string's first char in ra
+jmp @_main
 
-@print_prompt_char:
-    readr   rb      ra          ; Fetch the character & stash in rb
-    jeq     rb  rd  @get_input  ; character is null? then we're done printing
-    out     rb
-    inc     ra                  ; point to next character
-    jmp     @print_prompt_char  ; print the next character
+#include "include_files/print.asm"
+
+@_main:
+    movl    ra      @get_input  ; where to return from @print_string
+    push    ra
+    movl    ra      @prompt     ; pointer to the string we want to print
+    push    ra
+    jmp     @print_string
 
 
 @get_input:
     push    rd                  ; null char at the end
     movl    rb      '\n'        ; to check when the user is done typing
 @input_loop:
-    get     ra              ; store whatever the user types next in ra
-    out     ra              ; let the user see what they just typed
-    jeq     ra  rb  @output ; user pressed enter? then we're done here
-    push    ra              ; else, put the string on the stack
-    jmp     @input_loop     ; get the next character
+    get     ra                  ; store whatever the user types next in ra
+    out     ra                  ; let the user see what they just typed
+    jeq     ra  rb  @output     ; user pressed enter? then we're done here
+    push    ra                  ; else, put the string on the stack
+    jmp     @input_loop         ; get the next character
 
-; I am fully aware how easy it would be for the user to cause a stack overflow here.
+; It would be very easy for the user to cause a stack overflow here.
 ; This program is meant to test the get operation, not to be robust.
-
 
 @output:
     pop     ra                  ; get a char off the stack
@@ -46,7 +46,7 @@
     pb      "th"
     pb      "an"
     pb      "\s1"
-    pb      "7\s"
+    pb      "6\s"
     pb      "ch"
     pb      "ar"
     pb      "s\s"

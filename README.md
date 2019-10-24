@@ -2,7 +2,7 @@
 
 A 16-bit Virtual Machine and its toolchain, written for educational purposes by Dante Falzone, Romain Pesche, and Lance McDonald.
 
-Assembler: v1.7
+Assembler: v1.8
 
 Instruction set: v1.3
 
@@ -39,5 +39,3 @@ If you would like to make tweaks to the TMA-16, or write a new implementation of
 
 The Rust implementation is very, very fast and is guaranteed to be memory safe. However, it doesn't yet have super robust error handling
 built into it; in many cases it will just panic if the `.tmx` file it's running has errors. This will hopefully be fixed soonish.
-
-The first release will happen when `#include` directives and address labels are implemented in the assembler.

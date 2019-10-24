@@ -8,6 +8,7 @@ import subprocess
 import tempfile
 from pathlib import Path
 import pytest
+import os
 
 from tma_16_assembler import assemble
 
@@ -23,6 +24,8 @@ def launch_asm(source_file):
 
     output_file = tempfile.NamedTemporaryFile(suffix=".tmx")
 
+    os.system("cd programs")
+
     assemble(source_file, output_file.name)
 
     res = subprocess.run([
@@ -34,17 +37,20 @@ def launch_asm(source_file):
 
     stdout = res.stdout.decode('utf-8')
     stderr = res.stderr.decode('utf-8')
+
+    os.system("cd ..")
+
     return stdout, stderr
 
 
 @pytest.mark.parametrize("source_file, result", [
-    ('programs/helloworld.asm', ('Hello, world!', '54', 'A', '0', '0', '0', '0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0')),
+    ('programs/helloworld.asm', ('Hello, world!', '28', '37', '0', '0', '0', '0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0')),
     ('programs/bitshift.asm', ('', '1C', '1111', '40', '40', '0', '0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0')),
     ('programs/divide.asm', ('DONE', '45', 'C', '4', '3', '45', '3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0')),
     ('programs/e.asm', ('E', '06', '45', '0', '0', '0', '0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0')),
     ('programs/mult.asm', ('DONE', '41', '15', '1', '3', 'A', '0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0')),
     ('programs/str_print.asm', ('This program was written in TMA-16 Assembly by Dante Falzone',
-                                '1A', '0', '96', '0', '0', '0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0')),
+                                '28', '66', '0', '0', '0', '0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0')),
 ])
 def test_program_execution(source_file, result):
 
