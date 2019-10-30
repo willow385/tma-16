@@ -19,6 +19,7 @@ This implementation, written in Rust, can run TMA-16 executables almost as fast 
 like to be able to see what's going on you can slow down the execution. See `tma-16-rs/README.txt` for more details.
 
 Building the machine (on *nix) is easy, provided your Rust toolchain is up-to-date:
+
   1. `cd tma-16-rs`
 
   2. `cargo build --release`
@@ -27,6 +28,7 @@ And that's it! The path to the executable is `tma-16-rs/target/release/tma-16-rs
 it into `/usr/bin` for greater ease of use.
 
 To use this virtual machine, do the following (assuming that `tma-16-rs` is in `/usr/bin` or is aliased):
+
   1. Use the .asm files in the directory /programs/ (or write your own programs in TMA-16 Assembly!)
 
   2. Assemble them with `python3 tma_16_assembler.py [file].asm`. Pass the option `-h` or `--hexdump` on the command line to see a

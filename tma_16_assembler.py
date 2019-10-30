@@ -118,13 +118,13 @@ def instruction_size(token_list, i):
     # allocs are a special case
     if token_list[i] == "alloc":
         if is_int_literal(token_list[i + 1]):
-            return int(token_list[i + 1])
+            return int(token_list[i + 1]) - 1
 
         elif is_hex_literal(token_list[i + 1]):
-            return int(token_list[i + 1], 16)
+            return int(token_list[i + 1], 16) - 1
 
         elif is_bin_literal(token_list[i + 1]):
-            return int(token_list[i + 1][2:], 2)
+            return int(token_list[i + 1][2:], 2) - 1
 
         else:
             print(f"error: invalid int literal `{token_list[i + 1]}` for alloc")
@@ -395,17 +395,17 @@ def assemble(input_file, output_file=None):
 
         elif token == "alloc":  # allocate (assembler directive to allocate a certain amount of memory)
             mem_amount = 0
-            if is_int_literal(tokens[i + 1]):
-                mem_amount = int(tokens[i + 1])
-            elif is_hex_literal(tokens[i + 1]):
-                mem_amount = int(tokens[i + 1], 16)
-            elif is_bin_literal(tokens[i + 1]):
-                mem_amount = int(tokens[i + 1][2:], 2)
+            if is_int_literal(tokens[i + 2]):
+                mem_amount = int(tokens[i + 2])
+            elif is_hex_literal(tokens[i + 2]):
+                mem_amount = int(tokens[i + 2], 16)
+            elif is_bin_literal(tokens[i + 2]):
+                mem_amount = int(tokens[i + 2][2:], 2)
             else:
-                print(f"error: {input_file}: invalid literal `{tokens[i + 1]}`")
+                print(f"error: {input_file}: invalid literal `{tokens[i + 2]}`")
                 exit(1)
 
-            tokens[i + 1] = ""  # so we don't have a stray number in the code
+            # tokens[i + 2] = ""  # so we don't have a stray number in the code
 
             for i in range(0, mem_amount):
                 machine_code_bytes.append(0x00)
@@ -455,7 +455,11 @@ def assemble(input_file, output_file=None):
         i += 1  # update index counter
 
     # now create the executable
-    new_file_name = output_file or input_file[:-4] + ".tmx"
+    new_file_name = ""
+    if output_file and output_file[0] != "-":
+        new_file_name = output_file
+    else:
+        new_file_name = input_file[:-4] + ".tmx"
     new_file = open(new_file_name, "w+b")
     binary_format = bytearray(machine_code_bytes)
     new_file.write(binary_format)
