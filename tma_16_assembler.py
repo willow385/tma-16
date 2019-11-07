@@ -241,7 +241,7 @@ def assemble(input_file, output_file=None):
     # then we turn it into TMA-16 machine code
     machine_code_bytes = []
 
-    for token,next_token in zip(tokens, tokens[1:]):
+    for token, next_token in zip(tokens, tokens[1:]):
         # The instruction set of the TMA-16 is based on a
         # pen-and-paper model I made earlier called the TMA-8. I
         # chose to make the digital version 16-bit so it could
@@ -401,7 +401,7 @@ def assemble(input_file, output_file=None):
             elif is_bin_literal(next_token):
                 mem_amount = int(next_token[2:], 2)
             else:
-                print(f"error: {input_file}: invalid literal `{tokens[i + 2]}` ({i}th token)")
+                print(f"error: {input_file}: invalid literal `{next_token}`")
                 exit(1)
 
             next_token = ""  # so we don't have a stray number in the code
@@ -450,7 +450,6 @@ def assemble(input_file, output_file=None):
 
             if byte_token:
                 machine_code_bytes.append(byte_token)
-
 
     # now create the executable
     new_file_name = ""

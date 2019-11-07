@@ -2,7 +2,7 @@
 
 A 16-bit Virtual Machine and its toolchain, written for educational purposes by Dante Falzone, Romain Pesche, and Lance McDonald.
 
-Assembler: v1.8
+Assembler: v1.9
 
 Instruction set: v1.3
 
