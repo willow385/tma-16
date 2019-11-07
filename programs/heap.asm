@@ -1,11 +1,10 @@
-; Program that uses main memory to store up to five kilobytes of data.
+; Program that uses main memory to store up to ten kilobytes of data.
 ; I'm not sure how similar this is to the way stacks work in modern-day machines,
-; but I think this is pretty neat nonetheless.
+; but I think this is pretty neat nonetheless. I'm referring to it as a "heap"
+; until someone tells me why that's wrong.
 
-; IMPORTANT TODO: Version 1.8 of the assembler won't assemble this for some reason that I am too
-; tired to fathom today. I need to fix this in version 1.9.
 
-#define MEMORY_SIZE 1024
+#define MEMORY_SIZE 10240
 
 jmp @_main
 
@@ -17,22 +16,26 @@ jmp @_main
     movl    rd      MEMORY_SIZE ; so we know how much memory we have available
 @_main_input_loop:
     get     rc                  ; get a single character
-    jeq     rc  ra  @_main_output_loop ; is it a newl? then we're done getting input
+    jeq     rc  ra  @_main_output ; is it a newl? then we're done getting input
     writr   rc  rb              ; write the entered character to main memory
     inc     rb                  ; move to the next byte
     jgr     rb  rd  @segfault   ; if too many chars have been written then segfault
     movr    rc  rb              ; save the address of the last char we wrote
-    movl    rb      @MEM_PTR    ; set the pointer back to the first char
     jmp     @_main_input_loop   ; else get more chars
 
+@_main_output:
+    movl    rb  @MEM_PTR
+    xor     rc  rc
 @_main_output_loop:
-    jeq     rb  rc  @_main_exit ; exit if ptr to current char equal ptr to last char
+    jeq     ra  rc  @_main_exit ; exit if ptr to current char equal ptr to last char
     readr   ra  rb              ; fetch the char pointed to by rb
     out     ra                  ; output it
     inc     rb                  ; move the ptr to select the next char
     jmp     @_main_output_loop  ; print the next char
 
 @_main_exit:
+    movl    ra  '\n'
+    out     ra
     halt
 
 @segfault:
