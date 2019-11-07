@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-# This is version 1.8 of the assembler
+# This is version 1.9 of the assembler
 
 import sys
 import re
@@ -241,8 +241,7 @@ def assemble(input_file, output_file=None):
     # then we turn it into TMA-16 machine code
     machine_code_bytes = []
 
-    i = 0  # index of currently selected token
-    for token in tokens:
+    for token,next_token in zip(tokens, tokens[1:]):
         # The instruction set of the TMA-16 is based on a
         # pen-and-paper model I made earlier called the TMA-8. I
         # chose to make the digital version 16-bit so it could
@@ -395,17 +394,17 @@ def assemble(input_file, output_file=None):
 
         elif token == "alloc":  # allocate (assembler directive to allocate a certain amount of memory)
             mem_amount = 0
-            if is_int_literal(tokens[i + 2]):
-                mem_amount = int(tokens[i + 2])
-            elif is_hex_literal(tokens[i + 2]):
-                mem_amount = int(tokens[i + 2], 16)
-            elif is_bin_literal(tokens[i + 2]):
-                mem_amount = int(tokens[i + 2][2:], 2)
+            if is_int_literal(next_token):
+                mem_amount = int(next_token)
+            elif is_hex_literal(next_token):
+                mem_amount = int(next_token, 16)
+            elif is_bin_literal(next_token):
+                mem_amount = int(next_token[2:], 2)
             else:
-                print(f"error: {input_file}: invalid literal `{tokens[i + 2]}`")
+                print(f"error: {input_file}: invalid literal `{tokens[i + 2]}` ({i}th token)")
                 exit(1)
 
-            # tokens[i + 2] = ""  # so we don't have a stray number in the code
+            next_token = ""  # so we don't have a stray number in the code
 
             for i in range(0, mem_amount):
                 machine_code_bytes.append(0x00)
@@ -452,7 +451,6 @@ def assemble(input_file, output_file=None):
             if byte_token:
                 machine_code_bytes.append(byte_token)
 
-        i += 1  # update index counter
 
     # now create the executable
     new_file_name = ""

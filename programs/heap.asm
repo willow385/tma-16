@@ -14,7 +14,7 @@ jmp @_main
 @_main:
     movl    rb      @MEM_PTR    ; pointer to where our program's memory is kept
     movl    ra      '\n'        ; to tell when we've gotten the end of our input
-    movl    rd      MEMORY_SIZE
+    movl    rd      MEMORY_SIZE ; so we know how much memory we have available
 @_main_input_loop:
     get     rc                  ; get a single character
     jeq     rc  ra  @_main_output_loop ; is it a newl? then we're done getting input
@@ -43,16 +43,16 @@ jmp @_main
     jmp     @print_string
     
 @segfault_str_ptr:
-;    pb      "Se"
-;    pb      "gm"
-;    pb      "en"
-;    pb      "ta"
-;    pb      "ti"
-;    pb      "on"
-;    pb      "\sf"
-;    pb      "au"
-;    pb      "lt"
+    pb      "Se"
+    pb      "gm"
+    pb      "en"
+    pb      "ta"
+    pb      "ti"
+    pb      "on"
+    pb      "\sf"
+    pb      "au"
+    pb      "lt"
     pb      "\n\0"
 
 @MEM_PTR:
-    alloc   MEMORY_SIZE         ; five kilobytes of memory we can use how we like
+    alloc   MEMORY_SIZE
