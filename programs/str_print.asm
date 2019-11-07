@@ -49,4 +49,3 @@ jmp @_main
     pb      "zo"
     pb      "ne"
     pb      "\n\0"
-

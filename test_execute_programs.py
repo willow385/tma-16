@@ -1,4 +1,4 @@
-""""
+"""
     Program to test the TMA-16 Assembler with pytest.
     Written by Romain Pesche.
 """

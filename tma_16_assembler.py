@@ -233,6 +233,8 @@ def assemble(input_file, output_file=None):
         for token in line.split(' '):
             if token != '':
                 tokens.append(token)
+    # hacky bug fix to a problem
+    tokens.append('0')
 
     expand_macro_defs(tokens)
 
@@ -241,7 +243,7 @@ def assemble(input_file, output_file=None):
     # then we turn it into TMA-16 machine code
     machine_code_bytes = []
 
-    for token, next_token in zip(tokens, tokens[1:]):
+    for token, next_token in zip(tokens[:-1], tokens[1:]):
         # The instruction set of the TMA-16 is based on a
         # pen-and-paper model I made earlier called the TMA-8. I
         # chose to make the digital version 16-bit so it could
