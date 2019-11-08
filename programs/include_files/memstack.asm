@@ -2,8 +2,6 @@
 ; memory, the way stacks work on normal machines, since the
 ; hardware stack is difficult to work with.
 
-#define MEM_LIMIT__ 0xFFFF ; highest defined address on TMA-16
-
 
 ; For this subroutine, the hardware stack must have the following
 ; contents on top:
