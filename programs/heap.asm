@@ -16,6 +16,7 @@ jmp @_main
     movl    rd      MEMORY_SIZE ; so we know how much memory we have available
 @_main_input_loop:
     get     rc                  ; get a single character
+    out     rc                  ; output the char so user can see what they're typing
     jeq     rc  ra  @_main_output ; is it a newl? then we're done getting input
     writr   rc  rb              ; write the entered character to main memory
     inc     rb                  ; move to the next byte
