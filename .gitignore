@@ -4,6 +4,7 @@
 
 # nano swapfiles
 */*.swp
+*.swp
 
 # rust crap
 **/Cargo.lock
