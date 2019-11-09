@@ -55,6 +55,13 @@ fn main() -> Result<(), String> {
     // Check for the option to run an executable that doesn't end in `.tmx`
     let x_option = contains_option(&args_vec, String::from("-x"));
 
+    // Check for the option to print a coredump.
+    let coredump_option =
+            contains_option(&args_vec, String::from("--coredump"))
+        ||
+            contains_option(&args_vec, String::from("-c"))
+    ;
+
     let tmx_filename = if x_option {
         let ex_arg_index = args_vec.iter().position(|a| a == "-x").unwrap();
         args_vec[ex_arg_index + 1].to_string()
@@ -413,10 +420,26 @@ fn main() -> Result<(), String> {
         }
     }
 
+    /* Print a coredump of the machine's memory at the time it exited if
+    the option "--coredump" or "-c" was passed. */
+    if coredump_option {
+        let mut i = 0;
+        for byte in addr_space {
+            print!("{} ", hex_to_str_8b(byte));
+            if i > 7 {
+                print!("\n");
+                i = 0;
+            } else {
+                i += 1;
+            }
+        }
+        print!("\n");
+    }
+
     Ok(())
 }
 
-// Function to convert a 16-bit value to a 4-digit hexadecimal representation
+// Functions to convert a 16-bit value to a 4-digit hexadecimal representation
 fn hex_to_str(hex: u16) -> String {
     if hex > 0xFFF {
         String::from(format!("{:X?}", hex))
@@ -428,6 +451,15 @@ fn hex_to_str(hex: u16) -> String {
         String::from(format!("000{:X?}", hex))
     }
 }
+
+fn hex_to_str_8b(hex: u8) -> String {
+    if hex > 0xF {
+        String::from(format!("{:X?}", hex))
+    } else {
+        String::from(format!("0{:X?}", hex))
+    }
+}
+
 
 // Function to go back up to redraw the diagram
 fn clear_screen(m: &Tma16) {

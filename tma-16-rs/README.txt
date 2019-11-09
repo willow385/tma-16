@@ -18,3 +18,6 @@ OPTION          BEHAVIOUR
 
 -x <filename>   Instead of parsing command-line args for an executable ending
                 with `.tmx`, the machine will simply execute the contents of <filename>.
+
+-c, --coredump  Print the contents of the machine's memory in 8-column hexadecimal format
+                when it stops execution.
