@@ -14,9 +14,9 @@
 ; a stack overflow if accessed, and value_to_push is the value
 ; you want to push onto the stack.
 ;
-; Keep in mind that this will take up two memory addresses since
-; this architecture's word size is 8 bits but the registers are
-; 16 bits wide.
+; Keep in mind that this will only push the lowest eight bits
+; of the value you want to push since this architecture's word
+; size is 8 bits but the registers are 16 bits wide.
 ;
 ; This subroutine will leave the updated stack pointer in rb.
 @memstack_push:
@@ -24,20 +24,6 @@
     pop     rc              ; stack_limit
     pop     rb              ; stack_pointer
     jgr     rb  rc  @_memstack_segfault
-    writr   ra  rb          ; write the value to the stack ptr
-    inc     rb              ; update the stack pointer
-    jgr     rb  rc  @_memstack_segfault
-
-    ; bitshift ra right by 8 bits so we can write its MSB
-    bsr     ra
-    bsr     ra
-    bsr     ra
-    bsr     ra
-    bsr     ra
-    bsr     ra
-    bsr     ra
-    bsr     ra
-
     writr   ra  rb          ; write the value to the stack ptr
     inc     rb              ; update the stack pointer
     pop     ip              ; return
@@ -58,24 +44,8 @@
 ; incorrect, there is NO GUARANTEE of memory safety.
 @memstack_pop:
     pop     rb              ; stack pointer
+    dec     rb              ; select the highest occupied byte
     readr   ra  rb          ; read *stack_pointer into ra
-    dec     rb              ; update stack pointer
-
-    ; We just popped the most significant eight bits into ra.
-    ; But we also want to get the least significant bits.
-    ; So let's shove the MSB 8 bits over to make room.
-    bsl     ra
-    bsl     ra
-    bsl     ra
-    bsl     ra
-    bsl     ra
-    bsl     ra
-    bsl     ra
-    bsl     ra
-
-    readr   rc  rb          ; get the least sig bits in rc
-    dec     rb              ; update stack pointer
-    or      ra  rc          ; ra should now contain the full val
     pop     ip              ; return
 
 

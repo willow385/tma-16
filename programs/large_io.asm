@@ -40,7 +40,7 @@ jmp @_main
     jmp     @memstack_pop
 @_output_loop:
     out     ra
-    jeq     rb  rd  @_main_exit
+    jgr     rd  rb  @_main_exit
     jmp     @_output
 
 @_main_exit:
