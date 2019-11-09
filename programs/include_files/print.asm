@@ -14,3 +14,27 @@
 @_print_string_return:
     pop     ip
 
+
+; Subroutine to print a single hexadecimal digit. To call this subroutine,
+; push the return address, put a 4-bit number in register A, and jump to
+; it. This will not clobber anything.
+@print_digit:
+    push    rb                   ; preserve rb's old value
+    movl    rb      0x9          ; number to compare against ra
+    jgr     ra  rb  @_print_digit_A_F ; ra > 0x9 ? then char in range A..F
+    push    ra
+    movl    rb      0x30         ; we can clobber this since it's already pushed
+    add     ra      rb           ; ra now contains our ascii value
+    out     ra                   ; print the ascii val of the number
+    pop     ra                   ; unclobber registers
+    pop     rb
+    jmp     @_print_digit_return
+@_print_digit_A_F:
+    movl    rb      0x37 ; add this to number from 0xA to 0xF to get ascii value
+    push    ra
+    add     ra      rb
+    out     ra
+    pop     ra           ; unclobber registers
+    pop     rb
+@_print_digit_return:
+    pop     ip
