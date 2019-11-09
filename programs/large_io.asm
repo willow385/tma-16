@@ -1,8 +1,6 @@
-; Program that reads in up to five kilobytes of characters and
+; Program that reads in up to ten kilobytes of characters and
 ; prints them back out backwards, written to test usage of
 ; subroutines in include_files/memstack.asm.
-
-; This program is not yet finished and requires debugging.
 
 #define MEMORY_SIZE 10240
 
