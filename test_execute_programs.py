@@ -44,13 +44,13 @@ def launch_asm(source_file):
 
 
 @pytest.mark.parametrize("source_file, result", [
-    ('programs/helloworld.asm', ('Hello, world!', '56', '37', '0', '0', '0', '0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0')),
+    ('programs/helloworld.asm', ('Hello, world!', '56', '65', '0', '0', '0', '0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0')),
     ('programs/bitshift.asm', ('', '1C', '1111', '40', '40', '0', '0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0')),
     ('programs/divide.asm', ('DONE', '45', 'C', '4', '3', '45', '3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0')),
     ('programs/e.asm', ('E', '06', '45', '0', '0', '0', '0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0')),
     ('programs/mult.asm', ('DONE', '41', '15', '1', '3', 'A', '0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0')),
     ('programs/str_print.asm', ('This program was written in TMA-16 Assembly by Dante Falzone',
-                                '56', '66', '0', '0', '0', '0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0')),
+                                '56', '94', '0', '0', '0', '0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0')),
 ])
 def test_program_execution(source_file, result):
 
