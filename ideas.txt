@@ -1,5 +1,7 @@
 ** Ideas, goals, etc. for the TMA-16 and its toolchain **
 
+> TODO: implement an option to give a coredump from the vm
+
 > Persistent disk images?
 
 > Graphics?

@@ -26,9 +26,10 @@ jmp @_main
 @_set_up_args:
     movl    ra      @_set_up_args   ; return address
     push    ra
+    movr    ra  rb                  ; stack pointer
+    push    ra
     movl    ra      0xFFFF          ; stack limit
     push    ra
-    movr    ra  rb                  ; stack pointer
     jmp     @_get_next_char
 
 @_output:
