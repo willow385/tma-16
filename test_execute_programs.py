@@ -46,7 +46,7 @@ def launch_asm(source_file):
 @pytest.mark.parametrize("source_file, result", [
     ('programs/helloworld.asm', ('Hello, world!', 'FD', '10C', '0', '0', '0', '0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0')),
     ('programs/bitshift.asm', ('', '1C', '1111', '40', '40', '0', '0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0')),
-    ('programs/divide.asm', ('0x0025 divided by 0x0004 equals 0x0009, remainder 0x0001',
+    ('programs/divide.asm', ('0x1776 divided by 0x0004 equals 0x05DD, remainder 0x0002',
                              '1F0', 'A', '1', '0', 'EC', '0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0')),
     ('programs/e.asm', ('E', '06', '45', '0', '0', '0', '0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0')),
     ('programs/mult.asm', ('DONE', '41', '15', '1', '3', 'A', '0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0')),
