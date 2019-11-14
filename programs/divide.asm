@@ -1,7 +1,7 @@
 jmp @_main
 
-#define NUMERATOR 0x400
-#define DENOMINATOR 0x40
+#define NUMERATOR 37
+#define DENOMINATOR 4
 
 #include "include_files/math.asm"
 
