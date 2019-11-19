@@ -1,11 +1,17 @@
+; This program was written to test the functionality of
+; the subroutines memstack_push_long and memstack_pop_long
+; in include_files/memstack.asm.
+
 jmp @_main
 
 #include "include_files/memstack.asm"
 #include "include_files/print.asm"
 
+; If this value is correctly printed by the end of the
+; program, then we're golden.
 #define VALUE 0xFEEB
 
-; for ALLOC_AMOUNT let's give ourselves a little padding
+; For ALLOC_AMOUNT let's give ourselves a little padding.
 #define ALLOC_AMOUNT 10
 
 @_main:
@@ -44,9 +50,11 @@ jmp @_main
     halt
 
 
+; Here is where our extra memory will be kept.
 @bss:
     alloc   ALLOC_AMOUNT
 
+; Here is where our string is. 
 @msg0:
     pb      "Va"
     pb      "lu"
