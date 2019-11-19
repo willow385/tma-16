@@ -236,7 +236,6 @@ def assemble(input_file, output_file=None):
             if token != '':
                 tokens.append(token)
 
-
     expand_macro_defs(tokens)
 
     expand_address_labels(tokens)
