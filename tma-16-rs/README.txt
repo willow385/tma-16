@@ -21,3 +21,5 @@ OPTION          BEHAVIOUR
 
 -c, --coredump  Print the contents of the machine's memory in 8-column hexadecimal format
                 when it stops execution.
+
+-d, --disk      Save memory writes to the file being executed.
