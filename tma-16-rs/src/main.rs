@@ -9,7 +9,9 @@ no doubt in large part to the Rust compiler's powerful optimization algorithm.
 */
 
 use std::env;
-use std::fs;
+use std::fs::read;
+use std::fs::File;
+use std::io::prelude::*;
 use std::{thread, time};
 
 pub mod machine;
@@ -31,7 +33,6 @@ fn contains_option(args: &Vec<String>, option: String) -> bool {
     for arg in args {
         if *arg == option {
             return true;
-            // didn't even know Rust had a 'return` keyword before today lol
         }
     }
 
@@ -62,6 +63,13 @@ fn main() -> Result<(), String> {
             contains_option(&args_vec, String::from("-c"))
     ;
 
+    // Option to use the input executable as a persistent disk image.
+    let disk_option = 
+            contains_option(&args_vec, String::from("-d"))
+        ||
+            contains_option(&args_vec, String::from("--disk"))
+    ;
+
     let tmx_filename = if x_option {
         let ex_arg_index = args_vec.iter().position(|a| a == "-x").unwrap();
         args_vec[ex_arg_index + 1].to_string()
@@ -70,12 +78,9 @@ fn main() -> Result<(), String> {
     };
 
 
-    // Then we parse the args to get the name of the executable we want to run.
-//    let tmx_filename = get_tmx_name(&args_vec).map_err(|e| e.to_string())?;
-
     /* We read the file's contents into a vector of unsigned bytes, which will be
     used as the "address space" in which the machine's main memory resides. */
-    let mut addr_space = fs::read(&tmx_filename).unwrap();
+    let mut addr_space = read(&tmx_filename).unwrap();
 
     // Here we create an instantiation of the machine.
     let mut machine = Tma16 {
@@ -393,6 +398,12 @@ fn main() -> Result<(), String> {
         for c in machine.stdout.chars() {
             print!("{}", c);
         }
+    }
+
+    // Save changes to the disk image file if any changes were made.
+    if disk_option {
+        let mut disk = File::create(tmx_filename).unwrap();
+        disk.write(&addr_space).expect("I/O error - unable to write to disk");
     }
 
     /* Print out a description of the machine's internal state at the time it halted if the option
