@@ -229,21 +229,24 @@ def assemble(input_file, output_file=None):
 
     # then we tokenize it
     tokens = []
+    i = 0
     for line in decommented_lines:
+        i += 1
         for token in line.split(' '):
             if token != '':
                 tokens.append(token)
-    # hacky bug fix to a problem
-    tokens.append('0')
+
 
     expand_macro_defs(tokens)
 
     expand_address_labels(tokens)
 
+    tokens.append("0")
+
     # then we turn it into TMA-16 machine code
     machine_code_bytes = []
 
-    for prev_token, token, next_token in zip(tokens[:-2], tokens[:-1], tokens[1:]):
+    for token, next_token in zip(tokens[:-1], tokens[1:]):
         # The instruction set of the TMA-16 is based on a
         # pen-and-paper model I made earlier called the TMA-8. I
         # chose to make the digital version 16-bit so it could
@@ -258,15 +261,15 @@ def assemble(input_file, output_file=None):
         if token == "":
             continue
 
-        elif is_int_literal(token) and prev_token != "alloc":
+        elif is_int_literal(token):
             machine_code_bytes.append(most_sig_8_bits(int(token)))
             machine_code_bytes.append(least_sig_8_bits(int(token)))
 
-        elif is_hex_literal(token) and prev_token != "alloc":
+        elif is_hex_literal(token):
             machine_code_bytes.append(most_sig_8_bits(int(token, 16)))
             machine_code_bytes.append(least_sig_8_bits(int(token, 16)))
 
-        elif is_bin_literal(token) and prev_token != "alloc":
+        elif is_bin_literal(token):
             machine_code_bytes.append(most_sig_8_bits(int(token[2:], 2)))
             machine_code_bytes.append(least_sig_8_bits(int(token[2:], 2)))
 
@@ -406,8 +409,14 @@ def assemble(input_file, output_file=None):
                 print(f"error: {input_file}: invalid literal `{next_token}`")
                 exit(1)
 
-            for i in range(0, mem_amount):
+            token = ""
+
+            # Alloc directives seem to leave a trailing number in the code.
+            # So, we omit the last two bytes.
+            for i in range(0, mem_amount - 2):
                 machine_code_bytes.append(0x00)
+
+            next_token = ""
 
         else:
 
