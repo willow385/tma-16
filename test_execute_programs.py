@@ -24,7 +24,7 @@ def launch_asm(source_file):
 
     output_file = tempfile.NamedTemporaryFile(suffix=".tmx")
 
-    os.system("cd programs")
+    os.system("cd examples")
 
     assemble(source_file, output_file.name)
 
@@ -44,13 +44,13 @@ def launch_asm(source_file):
 
 
 @pytest.mark.parametrize("source_file, result", [
-    ('programs/helloworld.asm', ('Hello, world!', 'FD', '10C', '0', '0', '0', '0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0')),
-    ('programs/bitshift.asm', ('', '1C', '1111', '40', '40', '0', '0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0')),
-    ('programs/divide.asm', ('0x1776 divided by 0x0004 equals 0x05DD, remainder 0x0002',
+    ('examples/helloworld.asm', ('Hello, world!', 'FD', '10C', '0', '0', '0', '0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0')),
+    ('examples/bitshift.asm', ('', '1C', '1111', '40', '40', '0', '0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0')),
+    ('examples/divide.asm', ('0x1776 divided by 0x0004 equals 0x05DD, remainder 0x0002',
                              '1F0', 'A', '2', '0', 'EC', '0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0')),
-    ('programs/e.asm', ('E', '06', '45', '0', '0', '0', '0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0')),
-    ('programs/mult.asm', ('DONE', '41', '15', '1', '3', 'A', '0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0')),
-    ('programs/str_print.asm', ('This program was written in TMA-16 Assembly by Dante Falzone',
+    ('examples/e.asm', ('E', '06', '45', '0', '0', '0', '0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0')),
+    ('examples/mult.asm', ('DONE', '41', '15', '1', '3', 'A', '0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0')),
+    ('examples/str_print.asm', ('This program was written in TMA-16 Assembly by Dante Falzone',
                                 'FD', '13B', '0', '0', '0', '0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0')),
 ])
 def test_program_execution(source_file, result):
@@ -75,7 +75,7 @@ def test_program_execution(source_file, result):
 
 
 @pytest.mark.parametrize("source_file, thread, error", [
-    ("programs/except.asm", 'main', 'attempt to add with overflow'),
+    ("examples/except.asm", 'main', 'attempt to add with overflow'),
 ])
 def test_program_with_exception(source_file, thread, error):
 
