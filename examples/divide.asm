@@ -1,5 +1,10 @@
+; This program demonstrates the usage of the @divide subroutine
+; in the math library for TMA-16 Assembly.
+
 jmp @_main
 
+; For demonstration purposes we'll be dividing 0x1776 by 0x4, but
+; these could be any unsigned 16-bit integers.
 #define NUMERATOR 0x1776
 #define DENOMINATOR 0x4
 
@@ -7,17 +12,23 @@ jmp @_main
 #include "include_files/math.asm"
 
 @_main:
-    movl    ra      @_main_print_num
+    ; Here we set up the arguments to @divide so we can jump to it.
+    ; As with all TMA-16 Assembly subroutines, the first thing we
+    ; push is the address to jump back to when the subroutine returns.
+    movl    ra      @_main_print_num     ; return address for @divide
     push    ra
-    movl    ra      NUMERATOR
+    movl    ra      NUMERATOR            ; number to divide
     push    ra
-    movl    ra      DENOMINATOR
+    movl    ra      DENOMINATOR          ; number by which to divide
     push    ra
     jmp             @divide
+
+; The division will have already been performed by now. The rest of the program
+; is just neatly outputting the results in a clear and readable form.
 @_main_print_num:
-    push    rb
+    push    rb      ; save the values, which are in registers A and B
     push    ra
-    movl    ra      @_main_print_str0
+    movl    ra      @_main_print_str0    ; return address
     push    ra
     movl    ra      NUMERATOR
     push    ra
