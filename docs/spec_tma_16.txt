@@ -74,7 +74,7 @@ Machine code   | Assembly syntax  | Description
                |                  | performs bitwise XOR.
 ---------------+------------------+-----------------------------------------------
 OD 0X          | not rX           | Performs a bitwise NOT operation on register X
-               |                  | and then incrments the instruction pointer by
+               |                  | and then increments the instruction pointer by
                |                  | 2.
 ---------------+------------------+-----------------------------------------------
 0E 0X          | out rX           | This will print to stdout the ASCII character
@@ -116,7 +116,7 @@ OD 0X          | not rX           | Performs a bitwise NOT operation on register
 15 0X          | inc rX           | Increase the value in register X by 1. If the
                |                  | resultant value is greater than 0xFFFF, the
                |                  | TMA-16 will print an error message and stop;
-               |                  | otherwise, it will incrmeent the instruction
+               |                  | otherwise, it will increment the instruction
                |                  | pointer by 2.
 ---------------+------------------+-----------------------------------------------
 16 0X          | dec rX           | Decrease the value in register X by 1 if it's
@@ -124,7 +124,7 @@ OD 0X          | not rX           | Performs a bitwise NOT operation on register
                |                  | pointer by 2.
 ---------------+------------------+-----------------------------------------------
 17 0X 0Y       | writr rX rY      | Write the value in register X to the memory
-               |                  | address equalling the value in register Y,
+               |                  | address pointed to by register Y,
                |                  | then increment the instruction pointer by 3.
 ---------------+------------------+-----------------------------------------------
 18 0X          | bsl rX           | Bitshift register X one bit to the left. Any
@@ -205,11 +205,3 @@ significant 8 bits representing the second char. So "fu", for example,
 represents the number 0x6675.
 
 As of version 1.5 of the assembler you can use #define with chars and charwords.
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-If you encounter a bug in the implementation, or you have a suggestion for a
-feature to add, feel free to submit a pull request. Features currently planned to
-be added next include address labels (to make it easier to `jmp` around in a
-program) and #include statements; also, I am working on a disassembler and am
-considering writing a linker.
