@@ -3,9 +3,13 @@
 
 jmp @main
 
+; For the hell of it, I've written this program to not rely
+; on any of the subroutines in include_files/. It is a wholly
+; standalone program.
 
 @main:
-    xor     ra  ra  ; loop counter
+    xor     ra  ra  ; loop counter starts at 0
+; Check to see if the loop counter is divisible by 15
 @_main_loop0:
     movl    rb      15
     movl    rc      @_main_ret_addr0
@@ -14,7 +18,7 @@ jmp @main
     push    ra      ; number to divide
     jmp             @is_divisible
 @_main_ret_addr0:
-    pop     rd
+    pop     rd ; rd contains 1 if ra is divisible by 15, else 0
     movl    rc      1
     jeq     rc  rd  @_main_number_mod_15 ; print FizzBuzz
 ; control flow comes here if the number is not divisible by 15
@@ -25,7 +29,7 @@ jmp @main
     push    ra      ; number to divide
     jmp             @is_divisible
 @_main_ret_addr1:
-    pop     rd
+    pop     rd ; similar to @_main_ret_addr0
     movl    rc      1
     jeq     rc  rd  @_main_number_mod_5 ; print Buzz
 ; control flow comes here if the number is not divisible by 5
@@ -64,6 +68,7 @@ jmp @main
     push    rc
     jmp             @print_number
 @_main_repeat_loop:
+    ; print a newline, update our loop counter, and continue unless ra == 101
     movl    rc      '\n'
     out     rc
     movl    rb      101
@@ -74,17 +79,18 @@ jmp @main
 
 ; Subroutine to check if a number is divisible by another number.
 ; Push the return address, then the divisor, then the number you want to divide by it,
-; before jumping here. It will leave 1 in rd if the number is divisible
-; by the divisor, and 0 in rd otherwise.
-; TODO this subroutine is borken, needs fixing
+; before jumping here. It will leave 1 on the stack if the number is divisible
+; by the divisor, and 0 otherwise.
+; If this was C the prototype for this might look something like this:
+; unsigned short is_divisible(unsigned short number, unsigned short divisor);
 @is_divisible:
-    pop     rb          ; number to divide (for example, 45)
-    pop     rc          ; divisor (for example, 15)
+    pop     rb          ; number to divide
+    pop     rc          ; divisor
     push    ra
     xor     ra  ra      ; zero
-    jeq     rb  ra  @_is_not_divisible
+    jeq     rb  ra  @_is_not_divisible ; we can skip a few instructions if number is zero
 @_is_divisible_loop0:
-    add     ra  rc      ; ra += 15
+    add     ra  rc
     jgr     ra  rb  @_is_not_divisible
     jeq     ra  rb  @_is_divisible
     jmp             @_is_divisible_loop0
@@ -104,6 +110,7 @@ jmp @main
     pop     ip
 
 
+; Subroutine to print "Fizz"
 @fizz:
     push    ra
     movl    ra      'F'
@@ -117,6 +124,7 @@ jmp @main
     pop     ip
 
 
+; Subroutine to print "Buzz"
 @buzz:
     push    ra
     movl    ra      'B'
@@ -130,6 +138,8 @@ jmp @main
     pop     ip
 
 
+; Subroutine to print a number >=0 and <100. Nothing super clever here,
+; basically just "puts(ra + (rb << 1));"
 @print_number:
     pop     rb      ; offset
     bsl     rb      ; multiply offset by two
@@ -145,7 +155,7 @@ jmp @main
     pop     ip
 
 @_numeral_table:
-    ; Auto-generated table of numerals to print
+    ; Table of numerals to print
     "0\0"
     "1\0"
     "2\0"
@@ -246,5 +256,3 @@ jmp @main
     "97"
     "98"
     "99"
-
-alloc 1000 ; extra space just in case
