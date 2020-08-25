@@ -39,5 +39,4 @@ To use this virtual machine, do the following (assuming that `tma-16-rs` is in `
 If you would like to make tweaks to the TMA-16, or write a new implementation of it, try running some of the provided programs
 (especially test.asm) to make sure that whatever you're doing still conforms to the specification.
 
-The Rust implementation is very, very fast and is guaranteed to be memory safe. However, it doesn't yet have super robust error handling
-built into it; in many cases it will just panic if the `.tmx` file it's running has errors. This will hopefully be fixed soonish.
+The TMA-16 has been partially ported to MinGW, but the MinGW implementation is very buggy.
