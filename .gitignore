@@ -1,6 +1,5 @@
 # assembled executables
 */*.tmx
-*/windows_pleb/*.tmx
 
 # nano swapfiles
 */*.swp
@@ -13,7 +12,6 @@ target/
 
 # except this one
 !*/no_asm.tmx
-!*/windows_pleb/no_asm.tmx
 
 # python stuff
 __pycache__

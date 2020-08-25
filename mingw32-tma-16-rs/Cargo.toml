@@ -1,0 +1,8 @@
+[package]
+name = "mingw32-tma-16-rs"
+version = "0.1.3"
+authors = ["Dante Falzone <dante.j.falzone@protonmail.com>"]
+edition = "2018"
+
+[dependencies]
+pancurses = "0.16"
